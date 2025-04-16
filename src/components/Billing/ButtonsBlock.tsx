@@ -9,21 +9,26 @@ interface ButtonsBlockProps {
   usdContractAddress?: `0x${string}`;
   bleadContractAddress: `0x${string}`;
   priceUsd?: number;
+  allowance?: number;
   decimals?: number;
   userEmail: string;
   billingPlan: BillingPlansSolidityKey;
+  onRefetchAllowance: () => void;
+  onRefetchSubscriptionEndTimestamp: () => void;
 }
 
 export const ButtonsBlock = ({
   usdContractAddress,
   bleadContractAddress,
   priceUsd,
+  allowance,
   decimals,
   userEmail,
   billingPlan,
+  onRefetchAllowance,
+  onRefetchSubscriptionEndTimestamp,
 }: ButtonsBlockProps) => {
   const [isError, setIsError] = useState(false);
-  const [isApproved, setIsApproved] = useState(false);
   const [isSpent, setIsSpent] = useState(false);
 
   return (
@@ -33,9 +38,10 @@ export const ButtonsBlock = ({
           usdContractAddress={usdContractAddress}
           bleadContractAddress={bleadContractAddress}
           priceUsd={priceUsd}
+          currentAllowanceUsd={allowance}
           decimals={decimals}
           onSuccess={() => {
-            setIsApproved(true);
+            onRefetchAllowance();
           }}
           onError={() => {
             setIsError(true);
@@ -43,10 +49,13 @@ export const ButtonsBlock = ({
         />
         <SpendTransactionBtn
           contractAddress={bleadContractAddress}
+          priceUsd={priceUsd}
+          currentAllowanceUsd={allowance}
           userEmail={userEmail}
           billingPlan={billingPlan}
-          isApproved={isApproved}
           onSuccess={() => {
+            onRefetchAllowance();
+            onRefetchSubscriptionEndTimestamp();
             setIsSpent(true);
           }}
           onError={() => {

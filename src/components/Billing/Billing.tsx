@@ -67,9 +67,23 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
   });
 
   const {
+    data: allowance,
+    isPending: isPendingAllowance,
+    isError: isErrorAllowance,
+    refetch: refetchAllowance,
+  } = useReadContract({
+    abi: usdContractAbi,
+    address: usdContractAddress as `0x${string}`,
+    functionName: "allowance",
+    args: [address, BLEAD_CONTRACT_ADDRESS],
+    query: { enabled: !!usdContractAddress },
+  });
+
+  const {
     data: subscriptionEndTimestamp,
     isPending: isPendingSubscriptionEndTimestamp,
     isError: isErrorSubscriptionEndTimestamp,
+    refetch: refetchSubscriptionEndTimestamp,
   } = useReadContract({
     abi: bleadContractAbi,
     address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
@@ -84,6 +98,7 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
     isPendingDecimals ||
     isPendingMonthlyPriceUsd ||
     isPendingAnnualPriceUsd ||
+    isPendingAllowance ||
     isPendingSubscriptionEndTimestamp;
 
   const isError =
@@ -92,6 +107,7 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
     isErrorUsdContractAddress ||
     isErrorMonthlyPriceUsd ||
     isErrorAnnualPriceUsd ||
+    isErrorAllowance ||
     isErrorSubscriptionEndTimestamp;
 
   if (isError) {
@@ -112,23 +128,53 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
       )}`}</p>
       <p>{`Montly price USD: ${monthlyPriceUsd}`}</p>
       <p>{`Montly price USD: ${annualPriceUsd}`}</p>
+      <p>{`Allowance USD: ${Number(
+        formatUnits(
+          allowance ? (allowance as bigint) : BigInt(0),
+          Number(decimals)
+        )
+      )}`}</p>
       <p>{`Subscribed till: ${subscriptionEndTimestamp}`}</p>
       <div className="w-full flex gap-8 flex-wrap justify-center items-center">
         <ButtonsBlock
           usdContractAddress={usdContractAddress as `0x${string}` | undefined}
           bleadContractAddress={BLEAD_CONTRACT_ADDRESS as `0x${string}`}
           priceUsd={monthlyPriceUsd as number | undefined}
+          allowance={Number(
+            formatUnits(
+              allowance ? (allowance as bigint) : BigInt(0),
+              Number(decimals)
+            )
+          )}
           decimals={decimals as number | undefined}
           userEmail={TEST_EMAIL}
           billingPlan={BILLING_PLANS_SOLIDITY_KEYS.MONTLY}
+          onRefetchAllowance={() => {
+            refetchAllowance();
+          }}
+          onRefetchSubscriptionEndTimestamp={() => {
+            refetchSubscriptionEndTimestamp();
+          }}
         />
         <ButtonsBlock
           usdContractAddress={usdContractAddress as `0x${string}` | undefined}
           bleadContractAddress={BLEAD_CONTRACT_ADDRESS as `0x${string}`}
           priceUsd={annualPriceUsd as number | undefined}
+          allowance={Number(
+            formatUnits(
+              allowance ? (allowance as bigint) : BigInt(0),
+              Number(decimals)
+            )
+          )}
           decimals={decimals as number | undefined}
           userEmail={TEST_EMAIL}
           billingPlan={BILLING_PLANS_SOLIDITY_KEYS.ANNUAL}
+          onRefetchAllowance={() => {
+            refetchAllowance();
+          }}
+          onRefetchSubscriptionEndTimestamp={() => {
+            refetchSubscriptionEndTimestamp();
+          }}
         />
       </div>
     </div>

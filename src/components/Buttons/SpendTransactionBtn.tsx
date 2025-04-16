@@ -11,19 +11,21 @@ import {
 import { useEffect } from "react";
 
 interface SpendTransactionBtnProps {
+  currentAllowanceUsd?: number;
+  priceUsd?: number;
   contractAddress: `0x${string}`;
   userEmail: string;
   billingPlan: BillingPlansSolidityKey;
-  isApproved: boolean;
   onSuccess: () => void;
   onError: () => void;
 }
 
 export const SpendTransactionBtn = ({
+  currentAllowanceUsd,
+  priceUsd,
   contractAddress,
   userEmail,
   billingPlan,
-  isApproved,
   onSuccess,
   onError,
 }: SpendTransactionBtnProps) => {
@@ -61,7 +63,14 @@ export const SpendTransactionBtn = ({
 
   return (
     <Button
-      disabled={!isApproved || isTxError || isReceiptError || isFetching}
+      disabled={
+        isTxError ||
+        isReceiptError ||
+        isFetching ||
+        !priceUsd ||
+        typeof currentAllowanceUsd !== "number" ||
+        currentAllowanceUsd < priceUsd
+      }
       onClick={() => {
         sendTransaction();
       }}

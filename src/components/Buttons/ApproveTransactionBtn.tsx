@@ -7,18 +7,20 @@ import { parseUnits } from "viem";
 import { useTransactionReceipt, useWriteContract } from "wagmi";
 
 interface ApproveTransactionBtnProps {
+  currentAllowanceUsd?: number;
+  priceUsd?: number;
   usdContractAddress?: `0x${string}`;
   bleadContractAddress: `0x${string}`;
-  priceUsd?: number;
   decimals?: number;
   onSuccess: () => void;
   onError: () => void;
 }
 
 export const ApproveTransactionBtn = ({
+  currentAllowanceUsd,
+  priceUsd,
   usdContractAddress,
   bleadContractAddress,
-  priceUsd,
   decimals,
   onSuccess,
   onError,
@@ -62,8 +64,10 @@ export const ApproveTransactionBtn = ({
         isSuccess ||
         isFetching ||
         !usdContractAddress ||
+        !decimals ||
         !priceUsd ||
-        !decimals
+        typeof currentAllowanceUsd !== "number" ||
+        currentAllowanceUsd >= priceUsd
       }
       onClick={() => sendTransaction()}
     >

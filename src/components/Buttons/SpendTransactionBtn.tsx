@@ -12,6 +12,7 @@ import { useEffect } from "react";
 
 interface SpendTransactionBtnProps {
   currentAllowanceUsd?: number;
+  currentBalanceUsd?: number;
   priceUsd?: number;
   contractAddress: `0x${string}`;
   userEmail: string;
@@ -22,6 +23,7 @@ interface SpendTransactionBtnProps {
 
 export const SpendTransactionBtn = ({
   currentAllowanceUsd,
+  currentBalanceUsd,
   priceUsd,
   contractAddress,
   userEmail,
@@ -69,7 +71,9 @@ export const SpendTransactionBtn = ({
         isFetching ||
         !priceUsd ||
         typeof currentAllowanceUsd !== "number" ||
-        currentAllowanceUsd < priceUsd
+        currentAllowanceUsd < priceUsd ||
+        typeof currentBalanceUsd !== "number" ||
+        currentBalanceUsd < priceUsd
       }
       onClick={() => {
         sendTransaction();

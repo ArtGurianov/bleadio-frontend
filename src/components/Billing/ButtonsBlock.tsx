@@ -10,6 +10,7 @@ interface ButtonsBlockProps {
   bleadContractAddress: `0x${string}`;
   priceUsd?: number;
   allowance?: number;
+  balance?: number;
   decimals?: number;
   userEmail: string;
   billingPlan: BillingPlansSolidityKey;
@@ -22,6 +23,7 @@ export const ButtonsBlock = ({
   bleadContractAddress,
   priceUsd,
   allowance,
+  balance,
   decimals,
   userEmail,
   billingPlan,
@@ -39,6 +41,7 @@ export const ButtonsBlock = ({
           bleadContractAddress={bleadContractAddress}
           priceUsd={priceUsd}
           currentAllowanceUsd={allowance}
+          currentBalanceUsd={balance}
           decimals={decimals}
           onSuccess={() => {
             onRefetchAllowance();
@@ -51,6 +54,7 @@ export const ButtonsBlock = ({
           contractAddress={bleadContractAddress}
           priceUsd={priceUsd}
           currentAllowanceUsd={allowance}
+          currentBalanceUsd={balance}
           userEmail={userEmail}
           billingPlan={billingPlan}
           onSuccess={() => {

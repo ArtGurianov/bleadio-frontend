@@ -146,6 +146,12 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
               Number(decimals)
             )
           )}
+          balance={Number(
+            formatUnits(
+              balanceUsd ? (balanceUsd as bigint) : BigInt(0),
+              Number(decimals)
+            )
+          )}
           decimals={decimals as number | undefined}
           userEmail={TEST_EMAIL}
           billingPlan={BILLING_PLANS_SOLIDITY_KEYS.MONTLY}
@@ -163,6 +169,12 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
           allowance={Number(
             formatUnits(
               allowance ? (allowance as bigint) : BigInt(0),
+              Number(decimals)
+            )
+          )}
+          balance={Number(
+            formatUnits(
+              balanceUsd ? (balanceUsd as bigint) : BigInt(0),
               Number(decimals)
             )
           )}

@@ -8,6 +8,7 @@ import { useTransactionReceipt, useWriteContract } from "wagmi";
 
 interface ApproveTransactionBtnProps {
   currentAllowanceUsd?: number;
+  currentBalanceUsd?: number;
   priceUsd?: number;
   usdContractAddress?: `0x${string}`;
   bleadContractAddress: `0x${string}`;
@@ -18,6 +19,7 @@ interface ApproveTransactionBtnProps {
 
 export const ApproveTransactionBtn = ({
   currentAllowanceUsd,
+  currentBalanceUsd,
   priceUsd,
   usdContractAddress,
   bleadContractAddress,
@@ -67,7 +69,9 @@ export const ApproveTransactionBtn = ({
         !decimals ||
         !priceUsd ||
         typeof currentAllowanceUsd !== "number" ||
-        currentAllowanceUsd >= priceUsd
+        currentAllowanceUsd >= priceUsd ||
+        typeof currentBalanceUsd !== "number" ||
+        currentBalanceUsd < priceUsd
       }
       onClick={() => sendTransaction()}
     >

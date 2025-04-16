@@ -63,7 +63,6 @@ export const ApproveTransactionBtn = ({
       disabled={
         isTxError ||
         isReceiptError ||
-        isSuccess ||
         isFetching ||
         !usdContractAddress ||
         !decimals ||

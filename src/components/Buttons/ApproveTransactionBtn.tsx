@@ -29,6 +29,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   decimals,
   onSuccess,
   onError,
+  children,
 }) => {
   const { writeContract, data: hash, isError: isTxError } = useWriteContract();
 
@@ -77,7 +78,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
       }
       onClick={() => sendTransaction()}
     >
-      {!isFetching ? `Approve ${priceUsd} USD` : "..."}
+      {!isFetching ? children : "..."}
     </Button>
   );
 };

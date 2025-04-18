@@ -32,6 +32,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   billingPlan,
   onSuccess,
   onError,
+  children,
 }) => {
   const { writeContract, data: hash, isError: isTxError } = useWriteContract();
 
@@ -83,7 +84,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
         sendTransaction();
       }}
     >
-      {!isFetching ? `Purchase` : "..."}
+      {!isFetching ? children : "..."}
     </Button>
   );
 };

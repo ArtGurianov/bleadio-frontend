@@ -35,7 +35,7 @@ export const GuardedLoginBtn = (props: GetComponentProps<typeof Button>) => {
   return (
     <DialogDrawer
       title={"Please login to continue."}
-      trigger={<Button {...props}>{"Login"}</Button>}
+      trigger={<Button {...props} />}
     >
       <Form {...form}>
         <form

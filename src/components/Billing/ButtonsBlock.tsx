@@ -50,7 +50,7 @@ export const ButtonsBlock = ({
           onError={() => {
             setIsError(true);
           }}
-        />
+        >{`Approve ${priceUsd} USD`}</ApproveTransactionBtn>
         <SpendTransactionBtn
           contractAddress={bleadContractAddress}
           priceUsd={priceUsd}
@@ -66,7 +66,9 @@ export const ButtonsBlock = ({
           onError={() => {
             setIsError(true);
           }}
-        />
+        >
+          {"Purchase"}
+        </SpendTransactionBtn>
       </div>
       {isError ? <p>{"A blockchain error occured."}</p> : null}
       {isSpent ? <p>{"Well done!"}</p> : null}

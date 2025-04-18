@@ -11,7 +11,11 @@ type WithAuthBtnProps = GetComponentProps<typeof Button> & {
 
 export const withAuthBtn = <T extends WithAuthBtnProps>(component: FC<T>) => {
   return (props: T) => {
-    const Cmp = props.userEmail ? component : GuardedLoginBtn;
-    return <Cmp {...props} />;
+    const Cmp = component;
+    return props.userEmail ? (
+      <Cmp {...props} />
+    ) : (
+      <GuardedLoginBtn children={props.children} className={props.className} />
+    );
   };
 };

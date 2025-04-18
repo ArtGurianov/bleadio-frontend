@@ -1,7 +1,7 @@
 "use client";
 
 import { bleadContractAbi, usdContractAbi } from "@/config/web3/abi";
-import { stringToBytes32 } from "@/lib/utils";
+// import { stringToBytes32 } from "@/lib/utils";
 import { formatUnits } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 import { ButtonsBlock } from "./ButtonsBlock";
@@ -83,18 +83,18 @@ const BillingContent = ({
     query: { enabled: !!usdContractAddress },
   });
 
-  const {
-    data: subscriptionEndTimestamp,
-    isPending: isPendingSubscriptionEndTimestamp,
-    isError: isErrorSubscriptionEndTimestamp,
-    refetch: refetchSubscriptionEndTimestamp,
-  } = useReadContract({
-    abi: bleadContractAbi,
-    address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
-    functionName: "getSubscriptionEndTimestamp",
-    args: userEmail ? [stringToBytes32(userEmail)] : undefined,
-    query: { enabled: !!userEmail },
-  });
+  // const {
+  //   data: subscriptionEndTimestamp,
+  //   isPending: isPendingSubscriptionEndTimestamp,
+  //   isError: isErrorSubscriptionEndTimestamp,
+  //   refetch: refetchSubscriptionEndTimestamp,
+  // } = useReadContract({
+  //   abi: bleadContractAbi,
+  //   address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
+  //   functionName: "getSubscriptionEndTimestamp",
+  //   args: userEmail ? [stringToBytes32(userEmail)] : undefined,
+  //   query: { enabled: !!userEmail },
+  // });
 
   const isLoading =
     isPendingBalance ||
@@ -102,8 +102,8 @@ const BillingContent = ({
     isPendingDecimals ||
     isPendingMonthlyPriceUsd ||
     isPendingAnnualPriceUsd ||
-    isPendingAllowance ||
-    isPendingSubscriptionEndTimestamp;
+    isPendingAllowance;
+  // || isPendingSubscriptionEndTimestamp;
 
   const isError =
     isErrorBalance ||
@@ -111,8 +111,8 @@ const BillingContent = ({
     isErrorUsdContractAddress ||
     isErrorMonthlyPriceUsd ||
     isErrorAnnualPriceUsd ||
-    isErrorAllowance ||
-    isErrorSubscriptionEndTimestamp;
+    isErrorAllowance;
+  // || isErrorSubscriptionEndTimestamp;
 
   if (isError) {
     return <p>{"An error occured while getting data from the blockchain"}</p>;
@@ -138,7 +138,7 @@ const BillingContent = ({
           Number(decimals)
         )
       )}`}</p>
-      <p>{`Subscribed till: ${subscriptionEndTimestamp}`}</p>
+      {/* <p>{`Subscribed till: ${subscriptionEndTimestamp}`}</p> */}
       <div className="w-full flex gap-8 flex-wrap justify-center items-center">
         <ButtonsBlock
           usdContractAddress={usdContractAddress as `0x${string}` | undefined}
@@ -163,7 +163,7 @@ const BillingContent = ({
             refetchAllowance();
           }}
           onRefetchSubscriptionEndTimestamp={() => {
-            refetchSubscriptionEndTimestamp();
+            // refetchSubscriptionEndTimestamp();
           }}
         />
         <ButtonsBlock
@@ -189,7 +189,7 @@ const BillingContent = ({
             refetchAllowance();
           }}
           onRefetchSubscriptionEndTimestamp={() => {
-            refetchSubscriptionEndTimestamp();
+            // refetchSubscriptionEndTimestamp();
           }}
         />
       </div>

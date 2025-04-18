@@ -7,13 +7,17 @@ import { useAccount, useReadContract } from "wagmi";
 import { ButtonsBlock } from "./ButtonsBlock";
 import { BILLING_PLANS_SOLIDITY_KEYS } from "./constants";
 
-const TEST_EMAIL = "artgurianov@protonmail.com";
-
 const BLEAD_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 if (!BLEAD_CONTRACT_ADDRESS)
   throw new Error("env variable for contract address is not provided");
 
-const BillingContent = ({ address }: { address: `0x${string}` }) => {
+const BillingContent = ({
+  address,
+  userEmail,
+}: {
+  address: `0x${string}`;
+  userEmail: string | null;
+}) => {
   const {
     data: usdContractAddress,
     isPending: isPendingUsdContractAddress,
@@ -88,8 +92,8 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
     abi: bleadContractAbi,
     address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
     functionName: "getSubscriptionEndTimestamp",
-    args: [stringToBytes32(TEST_EMAIL)],
-    query: { enabled: !!TEST_EMAIL },
+    args: userEmail ? [stringToBytes32(userEmail)] : undefined,
+    query: { enabled: !!userEmail },
   });
 
   const isLoading =
@@ -153,7 +157,7 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
             )
           )}
           decimals={decimals as number | undefined}
-          userEmail={TEST_EMAIL}
+          userEmail={userEmail}
           billingPlan={BILLING_PLANS_SOLIDITY_KEYS.MONTLY}
           onRefetchAllowance={() => {
             refetchAllowance();
@@ -179,7 +183,7 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
             )
           )}
           decimals={decimals as number | undefined}
-          userEmail={TEST_EMAIL}
+          userEmail={userEmail}
           billingPlan={BILLING_PLANS_SOLIDITY_KEYS.ANNUAL}
           onRefetchAllowance={() => {
             refetchAllowance();
@@ -193,7 +197,9 @@ const BillingContent = ({ address }: { address: `0x${string}` }) => {
   );
 };
 
-export const Billing = () => {
+export const Billing = ({ userEmail }: { userEmail: string | null }) => {
   const { address } = useAccount();
-  return address ? <BillingContent address={address} /> : null;
+  return address ? (
+    <BillingContent address={address} userEmail={userEmail} />
+  ) : null;
 };

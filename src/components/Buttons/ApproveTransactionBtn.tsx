@@ -2,11 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { usdContractAbi } from "@/config/web3/abi";
-import { useEffect } from "react";
+import { GetComponentProps } from "@/lib/types";
+import { FC, useEffect } from "react";
 import { parseUnits } from "viem";
 import { useTransactionReceipt, useWriteContract } from "wagmi";
+import { withAuthBtn } from "../Login/withAuthBtn";
 
-interface ApproveTransactionBtnProps {
+interface ApproveTransactionBtnProps extends GetComponentProps<typeof Button> {
+  userEmail: string | null;
   currentAllowanceUsd?: number;
   currentBalanceUsd?: number;
   priceUsd?: number;
@@ -17,7 +20,7 @@ interface ApproveTransactionBtnProps {
   onError: () => void;
 }
 
-export const ApproveTransactionBtn = ({
+const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   currentAllowanceUsd,
   currentBalanceUsd,
   priceUsd,
@@ -26,7 +29,7 @@ export const ApproveTransactionBtn = ({
   decimals,
   onSuccess,
   onError,
-}: ApproveTransactionBtnProps) => {
+}) => {
   const { writeContract, data: hash, isError: isTxError } = useWriteContract();
 
   const {
@@ -78,3 +81,5 @@ export const ApproveTransactionBtn = ({
     </Button>
   );
 };
+
+export const ApproveTransactionBtn = withAuthBtn(ApproveTransactionBtnCore);

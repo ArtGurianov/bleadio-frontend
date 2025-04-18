@@ -12,7 +12,7 @@ interface ButtonsBlockProps {
   allowance?: number;
   balance?: number;
   decimals?: number;
-  userEmail: string;
+  userEmail: string | null;
   billingPlan: BillingPlansSolidityKey;
   onRefetchAllowance: () => void;
   onRefetchSubscriptionEndTimestamp: () => void;
@@ -37,6 +37,7 @@ export const ButtonsBlock = ({
     <div className="flex flex-col gap-2 justify-center items-center p-8 w-full max-w-[320px]">
       <div className="flex flex-col gap-2 justify-center items-center">
         <ApproveTransactionBtn
+          userEmail={userEmail}
           usdContractAddress={usdContractAddress}
           bleadContractAddress={bleadContractAddress}
           priceUsd={priceUsd}

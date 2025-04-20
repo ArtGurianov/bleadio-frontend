@@ -17,9 +17,10 @@ import { z } from "zod";
 import { emailSchema } from "@/lib/schemas/emailSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/app/actions/login";
+import { useRouter } from "next/navigation";
 
 export const GuardedLoginBtn = (props: GetComponentProps<typeof Button>) => {
-  const [formStatus, setFormStatus] = useState<FormStatus>("PENDING");
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof emailSchema>>({
     resolver: zodResolver(emailSchema),
@@ -27,15 +28,28 @@ export const GuardedLoginBtn = (props: GetComponentProps<typeof Button>) => {
       email: "",
     },
   });
+  const [formStatus, setFormStatus] = useState<FormStatus>("PENDING");
 
   const handleSubmit = ({ email }: { email: string }) => {
-    login(email);
+    setFormStatus("LOADING");
+    login(email)
+      .catch((error) => {
+        if (error?.message !== "NEXT_REDIRECT") {
+          setFormStatus("ERROR");
+        }
+      })
+      .finally(() => {
+        setFormStatus((prev) => (prev === "LOADING" ? "SUCCESS" : prev));
+      });
   };
 
   return (
     <DialogDrawer
       title={"Please login to continue."}
       trigger={<Button {...props} />}
+      onClose={() => {
+        router.push("/");
+      }}
     >
       <Form {...form}>
         <form

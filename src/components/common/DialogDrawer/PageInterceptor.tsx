@@ -7,9 +7,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Drawer,
@@ -17,27 +16,24 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
+import { useRouter } from "next/navigation";
 
-export interface DialogDrawerProps {
+export interface PageInterceptorProps {
   className?: string;
   children: ReactNode;
-  trigger: ReactNode;
   title: string;
-  onClose: () => void;
 }
 
 const DialogWrapper = ({
   className,
   children,
-  trigger,
   title,
+  isOpen,
   onClose,
-}: DialogDrawerProps) => {
+}: PageInterceptorProps & { isOpen: boolean; onClose: () => void }) => {
   return (
-    <Dialog onOpenChange={onClose}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className={cn("py-8 px-4", className)}>
         <DialogHeader>
           <DialogTitle className="text-center font-serif text-4xl my-4 text-muted">
@@ -58,13 +54,12 @@ const DialogWrapper = ({
 const DrawerWrapper = ({
   className,
   children,
-  trigger,
   title,
+  isOpen,
   onClose,
-}: DialogDrawerProps) => {
+}: PageInterceptorProps & { isOpen: boolean; onClose: () => void }) => {
   return (
-    <Drawer onClose={onClose}>
-      <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+    <Drawer open={isOpen} onClose={onClose}>
       <DrawerContent className={cn("px-2 py-2", className)}>
         <DrawerHeader>
           <DrawerTitle className="text-center font-serif text-4xl text-muted">
@@ -82,9 +77,17 @@ const DrawerWrapper = ({
   );
 };
 
-export const DialogDrawer = (props: DialogDrawerProps) => {
+export const PageInterceptor = (props: PageInterceptorProps) => {
   const isWindowOverSM = useBreakpoint("sm");
 
+  const [isOpen, setIsOpen] = useState(true);
+  const router = useRouter();
+
+  const handleClose = () => {
+    setIsOpen(false);
+    router.back();
+  };
+
   const Comp = isWindowOverSM ? DialogWrapper : DrawerWrapper;
-  return <Comp {...props} />;
+  return <Comp {...props} isOpen={isOpen} onClose={handleClose} />;
 };

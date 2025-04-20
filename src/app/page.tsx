@@ -8,6 +8,7 @@ import { auth } from "@/config/auth";
 import { LogoutBtn } from "@/components/Buttons/LogoutBtn";
 import { QueryInterceptor } from "@/components/common/DialogDrawer/QueryInterceptor";
 import { InterceptQueryData } from "@/lib/types";
+import { Instructions } from "@/components/Instructions/Instructions";
 
 const INTERCEPT_QUERIES_CONFIG: InterceptQueryData[] = [
   {
@@ -34,8 +35,9 @@ export default async function HomePage() {
   return (
     <Providers initialState={initialState}>
       {userEmail ? <LogoutBtn /> : null}
-      <WalletInfo />
-      <Billing userEmail={userEmail || null} />
+      {/* <WalletInfo /> */}
+      {/* <Billing userEmail={userEmail || null} /> */}
+      <Instructions />
       <QueryInterceptor config={INTERCEPT_QUERIES_CONFIG} />
     </Providers>
   );

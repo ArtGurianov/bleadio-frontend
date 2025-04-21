@@ -40,7 +40,7 @@ const DialogWrapper = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className={cn("py-8 px-4", className)}>
         <DialogHeader>
-          <DialogTitle className="text-center font-serif text-4xl my-4 text-muted">
+          <DialogTitle className="text-center font-serif text-4xl my-4 text-muted-foreground">
             {data.title}
           </DialogTitle>
           <DialogDescription className="sr-only">
@@ -70,7 +70,7 @@ const DrawerWrapper = ({
     <Drawer open={isOpen} onClose={onClose}>
       <DrawerContent className={cn("px-2 py-2", className)}>
         <DrawerHeader>
-          <DrawerTitle className="text-center font-serif text-4xl text-muted">
+          <DrawerTitle className="text-center font-serif text-4xl text-muted-foreground">
             {data.title}
           </DrawerTitle>
           <DrawerDescription className="sr-only">

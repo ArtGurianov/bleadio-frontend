@@ -1,5 +1,3 @@
-import { GetApiKeyBtn } from "@/components/Buttons/GetApiKeyBtn";
-import { ResetApiKeyBtn } from "@/components/Buttons/ResetApiKeyBtn";
 import { InlineInfo } from "@/components/common/InlineInfo/InlineInfo";
 import { auth } from "@/config/auth";
 import { ApiKeyControls } from "./ApiKeyControls";
@@ -10,10 +8,11 @@ export const InstructionsApiKey = async () => {
   const userEmail = session?.user?.email;
 
   return (
-    <li className="flex flex-col px-4 w-full justify-center items-center">
-      <h3>{"1. Get Api key"}</h3>
+    <li className="flex flex-col px-4 justify-center items-center gap-1">
+      <h3 className="w-full px-2 font-mono">{"1. Get Api key"}</h3>
       <div className="flex gap-2 flex-wrap justify-center items-center">
         <InlineInfo
+          className="lg:min-w-[520px]"
           label="API KEY"
           description={
             "Make sure to store it as secret variable. Do not reveal/commit to public repositories."

@@ -5,7 +5,7 @@ import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { GuardedLoginBtn } from "./LoginDialog";
 
-type WithAuthBtnProps = GetComponentProps<typeof Button> & {
+export type WithAuthBtnProps = GetComponentProps<typeof Button> & {
   userEmail: string | null;
 };
 

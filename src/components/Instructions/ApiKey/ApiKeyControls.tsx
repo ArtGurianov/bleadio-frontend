@@ -1,18 +1,17 @@
 "use client";
 
 import { getApiKey } from "@/app/actions/getApiKey";
-import { withAuthBtn } from "@/components/Login/withAuthBtn";
-import { Button } from "@/components/ui/button";
+import { GetApiKeyBtn } from "@/components/Buttons/GetApiKeyBtn";
 import { FormStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Clipboard } from "./Clipboard";
 
 interface ApiKeyControlsProps {
   initialValue?: string;
   userEmail: string | null;
 }
 
-const GetApiKeyBtn = withAuthBtn(Button);
 const API_KEY_MASK = "••••••••-••••-••••-••••-••••••••••••";
 
 export const ApiKeyControls = ({
@@ -20,7 +19,6 @@ export const ApiKeyControls = ({
   userEmail,
 }: ApiKeyControlsProps) => {
   const [status, setStatus] = useState<FormStatus>("PENDING");
-
   const [apiKey, setApiKey] = useState(initialValue || API_KEY_MASK);
 
   const handleGetApiKey = () => {
@@ -46,13 +44,12 @@ export const ApiKeyControls = ({
 
   return (
     <div
-      className={cn("flex px-2 py-1 justify-center items-center gap-2 w-full", {
+      className={cn("flex px-2 py-1 justify-center items-center gap-4 w-full", {
         "bg-red-800/20": status === "ERROR",
       })}
     >
-      <span className="grow">
-        {status === "LOADING" ? "loading..." : apiKey}
-      </span>
+      <span className="grow">{displayValue}</span>
+      {apiKey !== API_KEY_MASK ? <Clipboard apiKey={apiKey} /> : null}
       <GetApiKeyBtn
         disabled={status === "LOADING"}
         userEmail={userEmail || null}

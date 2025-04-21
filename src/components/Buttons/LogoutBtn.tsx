@@ -8,7 +8,9 @@ import { LogoutSvgUrl } from "@/components/svg";
 export const LogoutBtn = () => {
   return (
     <Button
-      onClick={logout}
+      onClick={() => {
+        logout();
+      }}
       className="absolute top-8 right-8 opacity-60 hover:opacity-100"
       variant="unset"
       size="unset"

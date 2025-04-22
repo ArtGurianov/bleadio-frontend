@@ -1,4 +1,4 @@
-import { setTgUserId } from "@/app/actions/setTgUserId";
+import db from "@/config/db";
 import { uuidSchema } from "@/lib/schemas/uuidSchema";
 import { NextResponse } from "next/server";
 
@@ -14,16 +14,18 @@ export async function POST(
     params: Promise<{ token: string }>;
   }
 ) {
-  const { token } = await params;
-  if (token !== TG_BOT_TOKEN) throw new Error("Unauthorized webhook call");
-
   try {
+    let resultString = "Command not recognized.";
+    const { token } = await params;
+    if (token !== TG_BOT_TOKEN) resultString = "Unauthorized webhook call";
+
+    const body = await request.json();
     const {
       message: {
         from: { id, is_bot },
         text,
       },
-    } = (await request.json()) as {
+    } = body as {
       message: {
         from: { id: number; is_bot: boolean };
         text: string;
@@ -31,11 +33,7 @@ export async function POST(
     };
 
     if (!id || is_bot) {
-      const qs = new URLSearchParams({
-        text: "Only human interaction.",
-      }).toString();
-      await fetch(`${TELEGRAM_API_URL}/sendMessage?chat_id=${id}&${qs}`);
-      return NextResponse.json({ message: "ok" }, { status: 200 });
+      resultString = "Only human interaction.";
     }
 
     if (text.startsWith("/set_api_key")) {
@@ -45,27 +43,24 @@ export async function POST(
         parsed[0] !== "/set_api_key" ||
         !uuidSchema.safeParse(parsed[1]).success
       ) {
-        const qs = new URLSearchParams({
-          text: "Invalid format. Please send as `/set_api_key KEY`",
-        }).toString();
-        await fetch(`${TELEGRAM_API_URL}/sendMessage?chat_id=${id}&${qs}`);
-        return NextResponse.json({}, { status: 200 });
+        resultString = "Invalid format. Please send as `/set_api_key YOUR_KEY`";
       }
 
-      await setTgUserId(parsed[1], id);
-      const qs = new URLSearchParams({
-        text: "Success! You can now start sending notifications from your services.",
-      }).toString();
-      await fetch(`${TELEGRAM_API_URL}/sendMessage?chat_id=${id}&${qs}`);
-      return NextResponse.json({}, { status: 200 });
+      await db.user.update({
+        where: { apiKey: parsed[1] },
+        data: { tgUserId: id },
+      });
+
+      resultString =
+        "Success! You can now start sending notifications from your services.";
     }
 
     const qs = new URLSearchParams({
-      text: "Command not recognized.",
+      text: resultString,
     }).toString();
     await fetch(`${TELEGRAM_API_URL}/sendMessage?chat_id=${id}&${qs}`);
-    return NextResponse.json({}, { status: 200 });
   } catch (error) {
-    return NextResponse.json({}, { status: 500 });
+    console.error(error);
   }
+  return NextResponse.json({}, { status: 200 });
 }

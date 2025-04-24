@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { BILLING_PLANS } from "./utils/contsants";
 
 export type ValueOf<T extends object> = T[keyof T];
 export type GetComponentProps<T> = T extends
@@ -14,3 +15,7 @@ export interface InterceptQueryData {
   title: string;
   children: ReactNode;
 }
+
+export type NonUndefined<T> = T extends undefined ? never : T;
+
+export type BillingPlan = ValueOf<typeof BILLING_PLANS>;

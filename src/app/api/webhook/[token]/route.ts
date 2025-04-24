@@ -1,10 +1,12 @@
 import db from "@/config/db";
+import { getServerConfig } from "@/config/env";
 import { uuidSchema } from "@/lib/schemas/uuidSchema";
+import { AppClientError } from "@/lib/utils";
+import { formatErrorMessage } from "@/lib/utils/formatErrorMessage";
 import { NextResponse } from "next/server";
 
-const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
-if (!TG_BOT_TOKEN) throw new Error("Token not provided in env vars");
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${TG_BOT_TOKEN}`;
+const ENV_CONFIG = getServerConfig();
+const TELEGRAM_API_URL = `https://api.telegram.org/bot${ENV_CONFIG.TG_BOT_TOKEN}`;
 
 export async function POST(
   request: Request,
@@ -14,10 +16,15 @@ export async function POST(
     params: Promise<{ token: string }>;
   }
 ) {
+  let userId: number | null = null;
+  let userIsBot: boolean | null = null;
+  let userText: string | null = null;
+
   try {
-    let resultString = "Command not recognized.";
     const { token } = await params;
-    if (token !== TG_BOT_TOKEN) resultString = "Unauthorized webhook call";
+    if (token !== ENV_CONFIG.TG_BOT_TOKEN) {
+      throw new AppClientError("Unauthorized webhook call");
+    }
 
     const body = await request.json();
     const {
@@ -32,35 +39,60 @@ export async function POST(
       };
     };
 
-    if (!id || is_bot) {
-      resultString = "Only human interaction.";
+    if (
+      typeof id !== "number" ||
+      typeof text !== "string" ||
+      typeof is_bot !== "boolean"
+    ) {
+      throw new AppClientError("Error while parsing data.");
     }
+    userId = id;
+    userText = text;
+    userIsBot = is_bot;
+  } catch (error) {
+    return NextResponse.json(
+      { error: formatErrorMessage(error) },
+      { status: 400 }
+    );
+  }
 
-    if (text.startsWith("/set_api_key")) {
-      const parsed = text.split(" ");
+  try {
+    if (userIsBot) {
+      throw new AppClientError("Only human interaction.");
+    }
+    if (userText.startsWith("/set_api_key")) {
+      const parsed = userText.split(" ");
       if (
         parsed.length !== 2 ||
         parsed[0] !== "/set_api_key" ||
         !uuidSchema.safeParse(parsed[1]).success
       ) {
-        resultString = "Invalid format. Please send as `/set_api_key YOUR_KEY`";
+        throw new AppClientError(
+          "Invalid format. Please send as `/set_api_key YOUR_KEY`"
+        );
       }
-
       await db.user.update({
         where: { apiKey: parsed[1] },
-        data: { tgUserId: id },
+        data: { tgUserId: userId },
       });
-
-      resultString =
-        "Success! You can now start sending notifications from your services.";
+      throw new AppClientError(
+        "Success! You can now start sending notifications from your services."
+      );
     }
-
-    const qs = new URLSearchParams({
-      text: resultString,
-    }).toString();
-    await fetch(`${TELEGRAM_API_URL}/sendMessage?chat_id=${id}&${qs}`);
+    throw new AppClientError("Command not recognized.");
   } catch (error) {
-    console.error(error);
+    try {
+      const qs = new URLSearchParams({
+        text: formatErrorMessage(error),
+      }).toString();
+      await fetch(`${TELEGRAM_API_URL}/sendMessage?chat_id=${userId}&${qs}`);
+    } catch (error) {
+      return NextResponse.json(
+        { error: formatErrorMessage(error) },
+        { status: 400 }
+      );
+    }
   }
+
   return NextResponse.json({}, { status: 200 });
 }

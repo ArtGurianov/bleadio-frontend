@@ -19,10 +19,28 @@ export const bleadContractAbi = [
   },
   {
     type: "function",
-    name: "getSubscriptionEndTimestamp",
+    name: "getSubscriptionData",
+    inputs: [{ name: "userIdHash", type: "bytes32", internalType: "bytes32" }],
+    outputs: [
+      {
+        name: "",
+        type: "tuple",
+        internalType: "struct Blead.SubscriptionData",
+        components: [
+          {
+            name: "subscriptionStartTimestamp",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "subscriptionEndTimestamp",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
+      },
+    ],
     stateMutability: "view",
-    inputs: [{ name: "userEmailHash", type: "bytes32" }],
-    outputs: [{ type: "uint256" }],
   },
   {
     type: "function",

@@ -1,31 +1,18 @@
 import { sepolia, bsc, foundry } from "viem/chains";
-import {
-  cookieStorage,
-  createConfig,
-  createStorage,
-  http,
-  injected,
-} from "wagmi";
+import { cookieStorage, createConfig, createStorage, injected } from "wagmi";
 import { metaMask } from "wagmi/connectors";
+import { createViemClient } from "./viemClient";
 
-// const chain = getAppChain();
-
-const config = createConfig({
+export const wagmiConfig = createConfig({
   chains: [sepolia, bsc, foundry],
-  transports: {
-    [sepolia.id]: http(),
-    [bsc.id]: http(),
-    [foundry.id]: http(),
-  },
-  connectors: [injected(), metaMask()],
+  connectors: [injected({ target: "metaMask" }), metaMask()],
   storage: createStorage({ storage: cookieStorage }),
   ssr: true,
+  client: ({ chain }) => createViemClient(chain),
 });
-
-export const getWagmiConfig = () => config;
 
 declare module "wagmi" {
   interface Register {
-    config: ReturnType<typeof getWagmiConfig>;
+    config: typeof wagmiConfig;
   }
 }

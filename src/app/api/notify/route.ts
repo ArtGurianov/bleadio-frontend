@@ -1,34 +1,79 @@
 import db from "@/config/db";
 import { appDataSchema } from "@/lib/schemas/appDataSchema";
-import { formatDataMessage } from "@/lib/utils";
+import { AppClientError, formatDataMessage } from "@/lib/utils";
 import { NextResponse } from "next/server";
+import { getSubscriptionData } from "@/app/actions/getSubscriptionData";
+import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
+import { formatErrorMessage } from "@/lib/utils/formatErrorMessage";
+import { subscriptionDataSchema } from "@/lib/schemas/subscriptionDataSchema";
+import { calculateBillingPeriodStartTimestamp } from "@/lib/utils/calculateBillingPeriod";
+import { z } from "zod";
+import { getServerConfig } from "@/config/env";
 
-const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
-if (!TG_BOT_TOKEN) throw new Error("Token not provided in env vars");
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${TG_BOT_TOKEN}`;
+const ENV_CONFIG = getServerConfig();
+const TELEGRAM_API_URL = `https://api.telegram.org/bot${ENV_CONFIG.TG_BOT_TOKEN}`;
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const verificationResult = appDataSchema.safeParse(body);
-  if (verificationResult.error) {
-    const errorStr = verificationResult.error.errors.reduce(
-      (temp, next) =>
-        `${temp} ${next.path.toString().toUpperCase()} - ${next.message};`,
-      ""
-    );
-    return NextResponse.json(
-      { error: `Fields verification failed: ${errorStr}` },
-      { status: 400 }
-    );
-  }
-
   try {
+    const body = await request.json();
+    const verificationResult = appDataSchema.safeParse(body);
+    if (verificationResult.error) {
+      const errorStr = verificationResult.error.errors.reduce(
+        (temp, next) =>
+          `${temp} ${next.path.toString().toUpperCase()} - ${next.message};`,
+        ""
+      );
+      throw new AppClientError(`Fields verification failed: ${errorStr}`);
+    }
+
     const { apiKey, ...rest } = verificationResult.data;
 
     const user = await db.user.findUnique({ where: { apiKey } });
     if (!user) {
-      return NextResponse.json({ error: "Api key not found" }, { status: 404 });
+      throw new AppClientError("Api key not found");
     }
+    if (!user.tgUserId) {
+      throw new AppClientError("Please register api key in bot first");
+    }
+    const { data: subscriptionData, errorMessage: subsctiptionErrorMessage } =
+      await getSubscriptionData(user.id);
+    if (subsctiptionErrorMessage) {
+      throw new AppClientError(subsctiptionErrorMessage);
+    }
+    const { subscriptionStartTimestamp, subscriptionEndTimestamp } =
+      subscriptionData as z.infer<typeof subscriptionDataSchema>;
+    const billingPlan = getUserBillingPlan(Number(subscriptionEndTimestamp));
+    const messagesLimitNumber =
+      billingPlan === "PAID"
+        ? ENV_CONFIG.MESSAGES_LIMIT_PAID
+        : ENV_CONFIG.MESSAGES_LIMIT_FREE;
+    const billingPeriodStartTimestamp = calculateBillingPeriodStartTimestamp(
+      Number(subscriptionStartTimestamp) * 1000 ||
+        Math.round(user.createdAt.getTime())
+    );
+    if (
+      user.billingPeriodStart.getTime() === billingPeriodStartTimestamp &&
+      user.billingPeriodMessagesSent >= messagesLimitNumber
+    ) {
+      throw new AppClientError(
+        `Number of messages has exceeded limit.${
+          billingPlan === "FREE" ? " Consider upgrading to the PRO plan" : ""
+        }`
+      );
+    }
+    const isResetBillingPeriod =
+      billingPeriodStartTimestamp !== user.billingPeriodStart.getTime();
+    await db.user.update({
+      where: { apiKey },
+      data: {
+        billingPeriodMessagesSent: isResetBillingPeriod
+          ? 1
+          : user.billingPeriodMessagesSent + 1,
+        billingPeriodStart: isResetBillingPeriod
+          ? new Date(billingPeriodStartTimestamp)
+          : user.billingPeriodStart,
+      },
+    });
 
     const qs = new URLSearchParams({
       text: formatDataMessage(rest),
@@ -38,10 +83,10 @@ export async function POST(request: Request) {
     );
 
     return NextResponse.json({}, { status: 200 });
-  } catch {
+  } catch (error) {
     return NextResponse.json(
-      { error: `Failed while sending notification to telegram bot` },
-      { status: 500 }
+      { error: formatErrorMessage(error) },
+      { status: 400 }
     );
   }
 }

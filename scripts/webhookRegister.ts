@@ -1,12 +1,9 @@
+import { getServerConfig } from "@/config/env";
 import "dotenv/config";
 
-const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
-if (!TG_BOT_TOKEN) throw new Error("Token not provided in env vars");
-const APP_DOMAIN = process.env.APP_DOMAIN;
-if (!APP_DOMAIN) throw new Error("App domain not provided in env vars");
-
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${TG_BOT_TOKEN}`;
-const WEBHOOK_URL = `${APP_DOMAIN}/api/webhook/${TG_BOT_TOKEN}`;
+const ENV_CONFIG = getServerConfig();
+const TELEGRAM_API_URL = `https://api.telegram.org/bot${ENV_CONFIG.TG_BOT_TOKEN}`;
+const WEBHOOK_URL = `${ENV_CONFIG.APP_DOMAIN}/api/webhook/${ENV_CONFIG.TG_BOT_TOKEN}`;
 
 fetch(
   `${TELEGRAM_API_URL}/setWebhook?url=${WEBHOOK_URL}&drop_pending_updates=true`

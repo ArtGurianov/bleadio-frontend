@@ -17,17 +17,19 @@ datasource db {
 
 
 model User {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?
-  apiKey        String?         @unique
-  tgUserId      Int?            @unique
-  accounts      Account[]
-  sessions      Session[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                            String          @id @default(auto()) @map("_id") @db.ObjectId
+  name                          String?
+  email                         String?         @unique
+  emailVerified                 DateTime?
+  image                         String?
+  apiKey                        String?         @unique
+  tgUserId                      Int?            @unique
+  billingPeriodStart            DateTime        @default(now())
+  billingPeriodMessagesSent     Int             @default(0)
+  accounts                      Account[]
+  sessions                      Session[]
+  createdAt                     DateTime        @default(now())
+  updatedAt                     DateTime        @updatedAt
 }
 
 model Account {

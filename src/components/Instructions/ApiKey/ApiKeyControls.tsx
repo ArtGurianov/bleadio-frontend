@@ -25,9 +25,9 @@ export const ApiKeyControls = ({
     const isReset = apiKey !== API_KEY_MASK;
     setStatus("LOADING");
     getApiKey(isReset)
-      .then((data) => {
-        setApiKey(data);
-        setStatus("SUCCESS");
+      .then((res) => {
+        setApiKey((prev) => (res.success ? res.data : prev));
+        setStatus(res.success ? "SUCCESS" : "ERROR");
       })
       .catch(() => {
         setStatus("ERROR");

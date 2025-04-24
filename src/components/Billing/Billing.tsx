@@ -6,10 +6,9 @@ import { formatUnits } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 import { ButtonsBlock } from "./ButtonsBlock";
 import { BILLING_PLANS_SOLIDITY_KEYS } from "./constants";
+import { getClientConfig } from "@/config/env";
 
-const BLEAD_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
-if (!BLEAD_CONTRACT_ADDRESS)
-  throw new Error("env variable for contract address is not provided");
+const ENV_CONFIG = getClientConfig();
 
 const BillingContent = ({
   address,
@@ -24,7 +23,7 @@ const BillingContent = ({
     isError: isErrorUsdContractAddress,
   } = useReadContract({
     abi: bleadContractAbi,
-    address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
+    address: ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
     functionName: "USD_CONTRACT_ADDRESS",
   });
 
@@ -56,7 +55,7 @@ const BillingContent = ({
     isError: isErrorMonthlyPriceUsd,
   } = useReadContract({
     abi: bleadContractAbi,
-    address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
+    address: ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
     functionName: "MONTHLY_PRICE_USD",
   });
 
@@ -66,7 +65,7 @@ const BillingContent = ({
     isError: isErrorAnnualPriceUsd,
   } = useReadContract({
     abi: bleadContractAbi,
-    address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
+    address: ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
     functionName: "ANNUAL_PRICE_USD",
   });
 
@@ -79,19 +78,19 @@ const BillingContent = ({
     abi: usdContractAbi,
     address: usdContractAddress as `0x${string}`,
     functionName: "allowance",
-    args: [address, BLEAD_CONTRACT_ADDRESS],
+    args: [address, ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS],
     query: { enabled: !!usdContractAddress },
   });
 
   // const {
-  //   data: subscriptionEndTimestamp,
-  //   isPending: isPendingSubscriptionEndTimestamp,
-  //   isError: isErrorSubscriptionEndTimestamp,
-  //   refetch: refetchSubscriptionEndTimestamp,
+  //   data: subscriptionData,
+  //   isPending: isPendingSubscriptionData,
+  //   isError: isErrorSubscriptionData,
+  //   refetch: refetchSubscriptionData,
   // } = useReadContract({
   //   abi: bleadContractAbi,
   //   address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
-  //   functionName: "getSubscriptionEndTimestamp",
+  //   functionName: "getSubscriptionData",
   //   args: userEmail ? [stringToBytes32(userEmail)] : undefined,
   //   query: { enabled: !!userEmail },
   // });
@@ -142,7 +141,9 @@ const BillingContent = ({
       <div className="w-full flex gap-8 flex-wrap justify-center items-center">
         <ButtonsBlock
           usdContractAddress={usdContractAddress as `0x${string}` | undefined}
-          bleadContractAddress={BLEAD_CONTRACT_ADDRESS as `0x${string}`}
+          bleadContractAddress={
+            ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`
+          }
           priceUsd={monthlyPriceUsd as number | undefined}
           allowance={Number(
             formatUnits(
@@ -168,7 +169,9 @@ const BillingContent = ({
         />
         <ButtonsBlock
           usdContractAddress={usdContractAddress as `0x${string}` | undefined}
-          bleadContractAddress={BLEAD_CONTRACT_ADDRESS as `0x${string}`}
+          bleadContractAddress={
+            ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`
+          }
           priceUsd={annualPriceUsd as number | undefined}
           allowance={Number(
             formatUnits(

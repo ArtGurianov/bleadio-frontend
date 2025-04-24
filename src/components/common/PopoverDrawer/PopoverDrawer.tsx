@@ -25,7 +25,7 @@ export interface PopoverDrawerProps {
   onClose?: () => void;
 }
 
-const DialogWrapper = ({
+const PopoverWrapper = ({
   className,
   children,
   content,
@@ -35,16 +35,18 @@ const DialogWrapper = ({
   return (
     <Popover onOpenChange={onClose}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className={cn("py-8 px-4", className)}>
-        <div className="flex w-full justify-center items-center px-4 py-2">
-          <h2 className="text-center font-serif text-4xl my-4 text-muted-foreground">
+      <PopoverContent
+        className={cn("px-4", className)}
+        sideOffset={8}
+        collisionPadding={8}
+      >
+        <div className="flex w-full justify-center items-center px-4">
+          <h2 className="text-center font-serif font-normal text-3xl mb-4 text-muted-foreground">
             {title}
           </h2>
-          <span className="sr-only">{`Dialog content for ${title}`}</span>
+          <span className="sr-only">{`Popover content for ${title}`}</span>
         </div>
-        <div className="py-4 px-3 bg-primary/20 border border-primary">
-          {content}
-        </div>
+        {content}
       </PopoverContent>
     </Popover>
   );
@@ -80,6 +82,6 @@ const DrawerWrapper = ({
 export const PopoverDrawer = (props: PopoverDrawerProps) => {
   const isWindowOverSM = useBreakpoint("sm");
 
-  const Comp = isWindowOverSM ? DialogWrapper : DrawerWrapper;
+  const Comp = isWindowOverSM ? PopoverWrapper : DrawerWrapper;
   return <Comp {...props} />;
 };

@@ -11,19 +11,20 @@ export const LogoutBtn = () => {
       onClick={() => {
         logout();
       }}
-      className="absolute top-8 right-8 opacity-60 hover:opacity-100"
-      variant="unset"
+      variant="link"
       size="unset"
+      className="flex gap-1 text-lg font-light font-mono"
     >
       <Image
         src={LogoutSvgUrl}
-        className="w-16"
-        alt="logot"
+        className="w-6"
+        alt="logout"
         width="0"
         height="0"
         sizes="100vh"
         priority
       />
+      {"logout"}
     </Button>
   );
 };

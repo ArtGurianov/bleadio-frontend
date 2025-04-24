@@ -15,7 +15,12 @@ export const withAuthBtn = <T extends WithAuthBtnProps>(component: FC<T>) => {
     return props.userEmail ? (
       <Cmp {...props} />
     ) : (
-      <GuardedLoginBtn children={props.children} className={props.className} />
+      <GuardedLoginBtn
+        size={props.size}
+        variant={props.variant}
+        children={props.children}
+        className={props.className}
+      />
     );
   };
 };

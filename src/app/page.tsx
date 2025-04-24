@@ -5,11 +5,12 @@ import { cookieToInitialState } from "wagmi";
 import { WalletInfo } from "@/components/WalletInfo/WalletInfo";
 import { Billing } from "@/components/Billing/Billing";
 import { auth } from "@/config/auth";
-import { LogoutBtn } from "@/components/Buttons/LogoutBtn";
 import { QueryInterceptor } from "@/components/common/DialogDrawer/QueryInterceptor";
 import { InterceptQueryData } from "@/lib/types";
 import { Instructions } from "@/components/Instructions/Instructions";
 import { UserProfileBtn } from "@/components/Buttons/UserProfileBtn";
+import { UserSvgUrl } from "@/components/svg";
+import Image from "next/image";
 
 const INTERCEPT_QUERIES_CONFIG: InterceptQueryData[] = [
   {
@@ -31,11 +32,28 @@ export default async function HomePage() {
   const cookieHeader = headersList.get("cookie");
   const initialState = cookieToInitialState(getConfig(), cookieHeader);
 
-  const userEmail = session?.user?.email;
-
   return (
     <Providers initialState={initialState}>
-      <UserProfileBtn userEmail={userEmail || null}>{"test"}</UserProfileBtn>
+      {session?.user ? (
+        <UserProfileBtn
+          className="absolute top-4 right-8 lg:opacity-60 lg:hover:opacity-100"
+          variant="unset"
+          size="unset"
+          userEmail={session.user.email || null}
+          tgUserId={session.user.tgUserId}
+          billingPeriodMessagesSent={session.user.billingPeriodMessagesSent}
+        >
+          <Image
+            src={UserSvgUrl}
+            className="w-16"
+            alt="user"
+            width="0"
+            height="0"
+            sizes="100vh"
+            priority
+          />
+        </UserProfileBtn>
+      ) : null}
       {/* <WalletInfo /> */}
       {/* <Billing userEmail={userEmail || null} /> */}
       <Instructions />

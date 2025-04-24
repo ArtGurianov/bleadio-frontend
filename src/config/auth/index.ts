@@ -8,6 +8,7 @@ import { getServerConfig } from "../env";
 declare module "next-auth" {
   interface Session {
     user: {
+      tgUserId?: number;
       apiKey?: string;
       billingPeriodStart: Date;
       billingPeriodMessagesSent: number;
@@ -15,6 +16,7 @@ declare module "next-auth" {
   }
 
   interface User {
+    tgUserId?: number;
     apiKey?: string;
     billingPeriodStart: Date;
     billingPeriodMessagesSent: number;
@@ -32,6 +34,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async session({ session, user }) {
+      session.user.tgUserId = user.tgUserId;
       session.user.apiKey = user.apiKey;
       session.user.billingPeriodMessagesSent = user.billingPeriodMessagesSent;
       session.user.billingPeriodStart = user.billingPeriodStart;

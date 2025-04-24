@@ -2,13 +2,10 @@
 
 import { useBreakpoint } from "@/lib/hooks/useBreakpoint";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -20,7 +17,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-export interface DialogDrawerProps {
+export interface PopoverDrawerProps {
   className?: string;
   children: ReactNode;
   content: ReactNode;
@@ -34,24 +31,22 @@ const DialogWrapper = ({
   content,
   title,
   onClose,
-}: DialogDrawerProps) => {
+}: PopoverDrawerProps) => {
   return (
-    <Dialog onOpenChange={onClose}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className={cn("py-8 px-4", className)}>
-        <DialogHeader>
-          <DialogTitle className="text-center font-serif text-4xl my-4 text-muted-foreground">
+    <Popover onOpenChange={onClose}>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverContent className={cn("py-8 px-4", className)}>
+        <div className="flex w-full justify-center items-center px-4 py-2">
+          <h2 className="text-center font-serif text-4xl my-4 text-muted-foreground">
             {title}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            {`Dialog content for ${title}`}
-          </DialogDescription>
-        </DialogHeader>
+          </h2>
+          <span className="sr-only">{`Dialog content for ${title}`}</span>
+        </div>
         <div className="py-4 px-3 bg-primary/20 border border-primary">
           {content}
         </div>
-      </DialogContent>
-    </Dialog>
+      </PopoverContent>
+    </Popover>
   );
 };
 
@@ -61,7 +56,7 @@ const DrawerWrapper = ({
   content,
   title,
   onClose,
-}: DialogDrawerProps) => {
+}: PopoverDrawerProps) => {
   return (
     <Drawer onClose={onClose}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
@@ -82,7 +77,7 @@ const DrawerWrapper = ({
   );
 };
 
-export const DialogDrawer = (props: DialogDrawerProps) => {
+export const PopoverDrawer = (props: PopoverDrawerProps) => {
   const isWindowOverSM = useBreakpoint("sm");
 
   const Comp = isWindowOverSM ? DialogWrapper : DrawerWrapper;

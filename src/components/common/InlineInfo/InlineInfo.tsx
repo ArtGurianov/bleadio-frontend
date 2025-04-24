@@ -26,12 +26,8 @@ export const InlineInfo = ({
       <span className="flex gap-1 px-2 bg-muted-foreground/20 justify-center items-center border-r border-muted-foreground/40 font-medium text-muted-foreground/80">
         {label}
         {description ? (
-          <TooltipPopover
-            trigger={
-              <AlertCircleIcon size={16} className="text-muted-foreground" />
-            }
-          >
-            {description}
+          <TooltipPopover content={description}>
+            {<AlertCircleIcon size={16} className="text-muted-foreground" />}
           </TooltipPopover>
         ) : null}
       </span>

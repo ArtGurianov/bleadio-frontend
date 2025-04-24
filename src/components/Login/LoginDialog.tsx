@@ -46,56 +46,58 @@ export const GuardedLoginBtn = (props: GetComponentProps<typeof Button>) => {
   return (
     <DialogDrawer
       title={"Please login to continue."}
-      trigger={<Button {...props} />}
+      content={
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="flex flex-col sm:flex-row gap-4 self-stretch justify-center items-center mt-4"
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="grow self-stretch">
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={formStatus === "LOADING"}
+                      placeholder={"Enter your email"}
+                      onChange={(ev) => {
+                        setFormStatus("PENDING");
+                        form.clearErrors();
+                        field.onChange(ev);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-center text-danger" />
+                </FormItem>
+              )}
+            />
+            <div className="flex self-stretch justify-center">
+              {formStatus === "SUCCESS" ? (
+                <span className="text-2xl text-center text-primary">
+                  {"Email sent!"}
+                </span>
+              ) : (
+                <Button
+                  type="submit"
+                  disabled={
+                    formStatus === "LOADING" ||
+                    !!Object.keys(form.formState.errors).length
+                  }
+                >
+                  {formStatus === "LOADING" ? "Loading..." : "Submit"}
+                </Button>
+              )}
+            </div>
+          </form>
+        </Form>
+      }
       onClose={() => {
         router.push("/");
       }}
     >
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex flex-col sm:flex-row gap-4 self-stretch justify-center items-center mt-4"
-        >
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="grow self-stretch">
-                <FormControl>
-                  <Input
-                    {...field}
-                    disabled={formStatus === "LOADING"}
-                    placeholder={"Enter your email"}
-                    onChange={(ev) => {
-                      setFormStatus("PENDING");
-                      form.clearErrors();
-                      field.onChange(ev);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage className="text-center text-danger" />
-              </FormItem>
-            )}
-          />
-          <div className="flex self-stretch justify-center">
-            {formStatus === "SUCCESS" ? (
-              <span className="text-2xl text-center text-primary">
-                {"Email sent!"}
-              </span>
-            ) : (
-              <Button
-                type="submit"
-                disabled={
-                  formStatus === "LOADING" ||
-                  !!Object.keys(form.formState.errors).length
-                }
-              >
-                {formStatus === "LOADING" ? "Loading..." : "Submit"}
-              </Button>
-            )}
-          </div>
-        </form>
-      </Form>
+      <Button {...props} />
     </DialogDrawer>
   );
 };

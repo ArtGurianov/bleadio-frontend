@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useSubscription } from "../Providers/SubscriptionProvider";
 import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
 import { getClientConfig } from "@/config/env";
+import { cn } from "@/lib/utils";
 
 const DISPLAY_USER_KEYS = {
   EMAIL: "EMAIL",
@@ -78,22 +79,20 @@ const UserProfileBtnCore = ({
     displaySubscriptionTill = "loading...";
   }
 
+  const messagesLimit =
+    displayBillingPlan === "PRO"
+      ? getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_PRO
+      : getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_LIGHT;
   const displayData: Record<DisplayUserKey, { label: string; value: string }> =
     {
       [DISPLAY_USER_KEYS.EMAIL]: { label: "email:", value: email! },
       [DISPLAY_USER_KEYS.TG_ID]: {
-        label: "tg id:",
+        label: "telegram id:",
         value: tgUserId ? tgUserId.toString() : "not set! (read step 2)",
       },
       [DISPLAY_USER_KEYS.MESSAGES_SENT]: {
         label: "messages (current billing period):",
-        value: `${billingPeriodMessagesSent.toString()}${
-          displayBillingPlan === "LIGHT"
-            ? "/" + getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_LIGHT
-            : displayBillingPlan === "PRO"
-            ? "/" + getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_PRO
-            : ""
-        }`,
+        value: `${billingPeriodMessagesSent.toString()}/${messagesLimit}`,
       },
       [DISPLAY_USER_KEYS.BILLING_PLAN]: {
         label: "current plan:",
@@ -117,8 +116,30 @@ const UserProfileBtnCore = ({
                 <span className="font-sans font-medium text-primary">
                   {displayData[each].label}
                 </span>
-                <span className="px-2 py-px bg-foreground/10 rounded-full text-sm font-mono">
-                  {displayData[each].value}
+                <span
+                  className={cn(
+                    "px-2 bg-foreground/10 rounded-full text-sm font-mono border border-primary",
+                    {
+                      "bg-destructive/60":
+                        each === DISPLAY_USER_KEYS.MESSAGES_SENT &&
+                        billingPeriodMessagesSent >= messagesLimit,
+                      "pr-0": each === "BILLING_PLAN",
+                    }
+                  )}
+                >
+                  {each === "BILLING_PLAN" ? (
+                    <span className="flex gap-1">
+                      {displayData[each].value}
+                      <Button
+                        className="px-2 font-serif rounded-l-none rounded-r-full"
+                        size="unset"
+                      >
+                        {"UPGRADE"}
+                      </Button>
+                    </span>
+                  ) : (
+                    displayData[each].value
+                  )}
                 </span>
               </p>
             ))}

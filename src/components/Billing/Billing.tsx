@@ -1,7 +1,6 @@
 "use client";
 
 import { bleadContractAbi, usdContractAbi } from "@/config/web3/abi";
-// import { stringToBytes32 } from "@/lib/utils";
 import { formatUnits } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 import { ButtonsBlock } from "./ButtonsBlock";
@@ -12,10 +11,10 @@ const ENV_CONFIG = getClientConfig();
 
 const BillingContent = ({
   address,
-  userEmail,
+  userId,
 }: {
   address: `0x${string}`;
-  userEmail: string | null;
+  userId: string | null;
 }) => {
   const {
     data: usdContractAddress,
@@ -82,19 +81,6 @@ const BillingContent = ({
     query: { enabled: !!usdContractAddress },
   });
 
-  // const {
-  //   data: subscriptionData,
-  //   isPending: isPendingSubscriptionData,
-  //   isError: isErrorSubscriptionData,
-  //   refetch: refetchSubscriptionData,
-  // } = useReadContract({
-  //   abi: bleadContractAbi,
-  //   address: BLEAD_CONTRACT_ADDRESS as `0x${string}`,
-  //   functionName: "getSubscriptionData",
-  //   args: userEmail ? [stringToBytes32(userEmail)] : undefined,
-  //   query: { enabled: !!userEmail },
-  // });
-
   const isLoading =
     isPendingBalance ||
     isPendingUsdContractAddress ||
@@ -102,7 +88,6 @@ const BillingContent = ({
     isPendingMonthlyPriceUsd ||
     isPendingAnnualPriceUsd ||
     isPendingAllowance;
-  // || isPendingSubscriptionEndTimestamp;
 
   const isError =
     isErrorBalance ||
@@ -111,7 +96,6 @@ const BillingContent = ({
     isErrorMonthlyPriceUsd ||
     isErrorAnnualPriceUsd ||
     isErrorAllowance;
-  // || isErrorSubscriptionEndTimestamp;
 
   if (isError) {
     return <p>{"An error occured while getting data from the blockchain"}</p>;
@@ -137,7 +121,6 @@ const BillingContent = ({
           Number(decimals)
         )
       )}`}</p>
-      {/* <p>{`Subscribed till: ${subscriptionEndTimestamp}`}</p> */}
       <div className="w-full flex gap-8 flex-wrap justify-center items-center">
         <ButtonsBlock
           usdContractAddress={usdContractAddress as `0x${string}` | undefined}
@@ -158,13 +141,10 @@ const BillingContent = ({
             )
           )}
           decimals={decimals as number | undefined}
-          userEmail={userEmail}
+          userId={userId}
           billingPlan={BILLING_PLANS_SOLIDITY_KEYS.MONTLY}
           onRefetchAllowance={() => {
             refetchAllowance();
-          }}
-          onRefetchSubscriptionEndTimestamp={() => {
-            // refetchSubscriptionEndTimestamp();
           }}
         />
         <ButtonsBlock
@@ -186,13 +166,10 @@ const BillingContent = ({
             )
           )}
           decimals={decimals as number | undefined}
-          userEmail={userEmail}
+          userId={userId}
           billingPlan={BILLING_PLANS_SOLIDITY_KEYS.ANNUAL}
           onRefetchAllowance={() => {
             refetchAllowance();
-          }}
-          onRefetchSubscriptionEndTimestamp={() => {
-            // refetchSubscriptionEndTimestamp();
           }}
         />
       </div>
@@ -200,9 +177,7 @@ const BillingContent = ({
   );
 };
 
-export const Billing = ({ userEmail }: { userEmail: string | null }) => {
+export const Billing = ({ userId }: { userId: string | null }) => {
   const { address } = useAccount();
-  return address ? (
-    <BillingContent address={address} userEmail={userEmail} />
-  ) : null;
+  return address ? <BillingContent address={address} userId={userId} /> : null;
 };

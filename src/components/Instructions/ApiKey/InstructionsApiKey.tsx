@@ -1,12 +1,7 @@
 import { InlineInfo } from "@/components/common/InlineInfo/InlineInfo";
-import { auth } from "@/config/auth";
 import { ApiKeyControls } from "./ApiKeyControls";
 
-export const InstructionsApiKey = async () => {
-  const session = await auth();
-  const apiKey = session?.user?.apiKey;
-  const userEmail = session?.user?.email;
-
+export const InstructionsApiKey = () => {
   return (
     <li className="flex flex-col px-4 justify-center items-center gap-1">
       <h3 className="w-full px-2 font-mono">{"1. Get Api key"}</h3>
@@ -18,7 +13,7 @@ export const InstructionsApiKey = async () => {
             "Make sure to store it as secret variable. Do not reveal/commit to public repositories."
           }
         >
-          <ApiKeyControls initialValue={apiKey} userEmail={userEmail || null} />
+          <ApiKeyControls />
         </InlineInfo>
       </div>
     </li>

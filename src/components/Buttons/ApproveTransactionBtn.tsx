@@ -9,7 +9,7 @@ import { useTransactionReceipt, useWriteContract } from "wagmi";
 import { withAuthBtn } from "../Login/withAuthBtn";
 
 interface ApproveTransactionBtnProps extends GetComponentProps<typeof Button> {
-  userEmail: string | null;
+  userId: string | null;
   currentAllowanceUsd?: number;
   currentBalanceUsd?: number;
   priceUsd?: number;

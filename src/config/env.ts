@@ -4,6 +4,9 @@ const CLIENT_ENV = {
   NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
   NEXT_PUBLIC_NETWORK: process.env.NEXT_PUBLIC_NETWORK,
   NEXT_PUBLIC_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+  NEXT_PUBLIC_MESSAGES_LIMIT_LIGHT:
+    process.env.NEXT_PUBLIC_MESSAGES_LIMIT_LIGHT,
+  NEXT_PUBLIC_MESSAGES_LIMIT_PRO: process.env.NEXT_PUBLIC_MESSAGES_LIMIT_PRO,
 } as const;
 
 const clientEnvSchema = z.object({
@@ -23,6 +26,12 @@ const clientEnvSchema = z.object({
       description: "Contract address for BLEAD solidity smart contract.",
     })
     .startsWith("0x"),
+  NEXT_PUBLIC_MESSAGES_LIMIT_LIGHT: z.coerce.number({
+    description: "Free limit for api",
+  }),
+  NEXT_PUBLIC_MESSAGES_LIMIT_PRO: z.coerce.number({
+    description: "Paid limit for api",
+  }),
 });
 
 const serverEnvSchema = clientEnvSchema.extend({
@@ -50,12 +59,6 @@ const serverEnvSchema = clientEnvSchema.extend({
       description: "App domain url",
     })
     .url(),
-  MESSAGES_LIMIT_FREE: z.coerce.number({
-    description: "Free limit for api",
-  }),
-  MESSAGES_LIMIT_PAID: z.coerce.number({
-    description: "Paid limit for api",
-  }),
 });
 
 export const getClientConfig = () => {

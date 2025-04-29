@@ -6,35 +6,30 @@ import { FormStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Clipboard } from "./Clipboard";
-
-interface ApiKeyControlsProps {
-  initialValue?: string;
-  userEmail: string | null;
-}
+import { useSession } from "next-auth/react";
 
 const API_KEY_MASK = "••••••••-••••-••••-••••-••••••••••••";
 
-export const ApiKeyControls = ({
-  initialValue,
-  userEmail,
-}: ApiKeyControlsProps) => {
+export const ApiKeyControls = () => {
+  const { data, update } = useSession();
+
   const [status, setStatus] = useState<FormStatus>("PENDING");
-  const [apiKey, setApiKey] = useState(initialValue || API_KEY_MASK);
 
   const handleGetApiKey = () => {
-    const isReset = apiKey !== API_KEY_MASK;
+    const isReset = !!data?.user?.apiKey;
     setStatus("LOADING");
     getApiKey(isReset)
       .then((res) => {
-        setApiKey((prev) => (res.success ? res.data : prev));
-        setStatus(res.success ? "SUCCESS" : "ERROR");
+        update({ apiKey: res.data }).finally(() => {
+          setStatus(res.success ? "SUCCESS" : "ERROR");
+        });
       })
       .catch(() => {
         setStatus("ERROR");
       });
   };
 
-  let displayValue = apiKey;
+  let displayValue = data?.user?.apiKey || API_KEY_MASK;
   if (status === "LOADING") {
     displayValue = "loading...";
   }
@@ -49,15 +44,16 @@ export const ApiKeyControls = ({
       })}
     >
       <span className="grow">{displayValue}</span>
-      {apiKey !== API_KEY_MASK ? <Clipboard apiKey={apiKey} /> : null}
+      {!!data?.user?.apiKey ? <Clipboard apiKey={data.user.apiKey} /> : null}
       <GetApiKeyBtn
+        userId={data?.user?.id || null}
         disabled={status === "LOADING"}
-        userEmail={userEmail || null}
+        userEmail={data?.user?.email || null}
         onClick={() => {
           handleGetApiKey();
         }}
       >
-        {apiKey !== API_KEY_MASK ? "RESET" : "GET"}
+        {data?.user?.apiKey ? "RESET" : "GET"}
       </GetApiKeyBtn>
     </div>
   );

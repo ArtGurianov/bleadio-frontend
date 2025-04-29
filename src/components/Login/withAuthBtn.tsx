@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { GuardedLoginBtn } from "./LoginDialog";
 
 export type WithAuthBtnProps = GetComponentProps<typeof Button> & {
-  userEmail: string | null;
+  userId: string | null;
 };
 
 export const withAuthBtn = <T extends WithAuthBtnProps>(component: FC<T>) => {
   return (props: T) => {
     const Cmp = component;
-    return props.userEmail ? (
+    return props.userId ? (
       <Cmp {...props} />
     ) : (
       <GuardedLoginBtn

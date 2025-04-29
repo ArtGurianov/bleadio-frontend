@@ -9,11 +9,12 @@ import {
   BillingPlansSolidityKey,
 } from "@/components/Billing/constants";
 import { FC, useEffect } from "react";
-import { withAuthBtn } from "../Login/withAuthBtn";
+import { withAuthBtn } from "@/components/Login/withAuthBtn";
 import { GetComponentProps } from "@/lib/types";
+import { useSubscription } from "@/components/Providers/SubscriptionProvider";
 
 interface SpendTransactionBtnProps extends GetComponentProps<typeof Button> {
-  userEmail: string | null;
+  userId: string | null;
   currentAllowanceUsd?: number;
   currentBalanceUsd?: number;
   priceUsd?: number;
@@ -28,13 +29,14 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   currentBalanceUsd,
   priceUsd,
   contractAddress,
-  userEmail,
+  userId,
   billingPlan,
   onSuccess,
   onError,
   children,
 }) => {
   const { writeContract, data: hash, isError: isTxError } = useWriteContract();
+  const { refetch } = useSubscription();
 
   const {
     isFetching,
@@ -44,6 +46,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
 
   useEffect(() => {
     if (isSuccess) {
+      refetch();
       onSuccess();
     }
   }, [isSuccess]);
@@ -55,13 +58,13 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   }, [isTxError, isReceiptError]);
 
   const sendTransaction = () => {
-    if (userEmail) {
+    if (userId) {
       writeContract({
         abi: bleadContractAbi,
         address: contractAddress,
         functionName: "updateSubscription",
         args: [
-          stringToBytes32(userEmail),
+          stringToBytes32(userId),
           BILLING_PLANS_SOLIDITY_KEYS_MAP[billingPlan],
         ],
       });

@@ -44,9 +44,9 @@ export async function POST(request: Request) {
       subscriptionData as z.infer<typeof subscriptionDataSchema>;
     const billingPlan = getUserBillingPlan(Number(subscriptionEndTimestamp));
     const messagesLimitNumber =
-      billingPlan === "PAID"
-        ? ENV_CONFIG.MESSAGES_LIMIT_PAID
-        : ENV_CONFIG.MESSAGES_LIMIT_FREE;
+      billingPlan === "PRO"
+        ? ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_PRO
+        : ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_LIGHT;
     const billingPeriodStartTimestamp = calculateBillingPeriodStartTimestamp(
       Number(subscriptionStartTimestamp) * 1000 ||
         Math.round(user.createdAt.getTime())
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     ) {
       throw new AppClientError(
         `Number of messages has exceeded limit.${
-          billingPlan === "FREE" ? " Consider upgrading to the PRO plan" : ""
+          billingPlan === "LIGHT" ? " Consider upgrading to the PRO plan" : ""
         }`
       );
     }

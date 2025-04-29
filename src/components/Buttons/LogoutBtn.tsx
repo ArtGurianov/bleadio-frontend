@@ -1,16 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { logout } from "@/app/actions/logout";
 import { Button } from "@/components/ui/button";
 import { LogoutSvgUrl } from "@/components/svg";
+import { signOut } from "next-auth/react";
 
 export const LogoutBtn = () => {
   return (
     <Button
-      onClick={() => {
-        logout();
-      }}
+      onClick={() => signOut()}
       variant="link"
       size="unset"
       className="flex gap-1 text-lg font-light font-mono"

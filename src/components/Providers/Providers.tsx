@@ -4,6 +4,8 @@ import { wagmiConfig } from "@/config/web3/wagmiConfig";
 import { ReactNode, useState } from "react";
 import { State, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SubscriptionProvider } from "./SubscriptionProvider";
+import { SessionProvider } from "next-auth/react";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -15,8 +17,12 @@ export const Providers = ({ children, initialState }: ProvidersProps) => {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <WagmiProvider config={config} initialState={initialState}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </WagmiProvider>
+    <SessionProvider>
+      <WagmiProvider config={config} initialState={initialState}>
+        <QueryClientProvider client={queryClient}>
+          <SubscriptionProvider>{children}</SubscriptionProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </SessionProvider>
   );
 };

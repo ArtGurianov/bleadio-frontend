@@ -12,10 +12,9 @@ interface ButtonsBlockProps {
   allowance?: number;
   balance?: number;
   decimals?: number;
-  userEmail: string | null;
+  userId: string | null;
   billingPlan: BillingPlansSolidityKey;
   onRefetchAllowance: () => void;
-  onRefetchSubscriptionEndTimestamp: () => void;
 }
 
 export const ButtonsBlock = ({
@@ -25,10 +24,9 @@ export const ButtonsBlock = ({
   allowance,
   balance,
   decimals,
-  userEmail,
+  userId,
   billingPlan,
   onRefetchAllowance,
-  onRefetchSubscriptionEndTimestamp,
 }: ButtonsBlockProps) => {
   const [isError, setIsError] = useState(false);
   const [isSpent, setIsSpent] = useState(false);
@@ -37,7 +35,7 @@ export const ButtonsBlock = ({
     <div className="flex flex-col gap-2 justify-center items-center p-8 w-full max-w-[320px]">
       <div className="flex flex-col gap-2 justify-center items-center">
         <ApproveTransactionBtn
-          userEmail={userEmail}
+          userId={userId}
           usdContractAddress={usdContractAddress}
           bleadContractAddress={bleadContractAddress}
           priceUsd={priceUsd}
@@ -56,11 +54,10 @@ export const ButtonsBlock = ({
           priceUsd={priceUsd}
           currentAllowanceUsd={allowance}
           currentBalanceUsd={balance}
-          userEmail={userEmail}
+          userId={userId}
           billingPlan={billingPlan}
           onSuccess={() => {
             onRefetchAllowance();
-            onRefetchSubscriptionEndTimestamp();
             setIsSpent(true);
           }}
           onError={() => {

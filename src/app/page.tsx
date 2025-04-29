@@ -34,28 +34,24 @@ export default async function HomePage() {
 
   return (
     <Providers initialState={initialState}>
-      {session?.user ? (
-        <UserProfileBtn
-          className="absolute top-4 right-8 lg:opacity-60 lg:hover:opacity-100"
-          variant="unset"
-          size="unset"
-          userEmail={session.user.email || null}
-          tgUserId={session.user.tgUserId}
-          billingPeriodMessagesSent={session.user.billingPeriodMessagesSent}
-        >
-          <Image
-            src={UserSvgUrl}
-            className="w-16"
-            alt="user"
-            width="0"
-            height="0"
-            sizes="100vh"
-            priority
-          />
-        </UserProfileBtn>
-      ) : null}
-      {/* <WalletInfo /> */}
-      {/* <Billing userEmail={userEmail || null} /> */}
+      <UserProfileBtn
+        className="absolute top-4 right-8 lg:opacity-60 lg:hover:opacity-100"
+        variant="unset"
+        size="unset"
+        userId={session?.user.id ? session?.user.id : null}
+      >
+        <Image
+          src={UserSvgUrl}
+          className="w-16"
+          alt="user"
+          width="0"
+          height="0"
+          sizes="100vh"
+          priority
+        />
+      </UserProfileBtn>
+      <WalletInfo />
+      <Billing userId={session?.user.id ? session?.user.id : null} />
       <Instructions />
       <QueryInterceptor config={INTERCEPT_QUERIES_CONFIG} />
     </Providers>

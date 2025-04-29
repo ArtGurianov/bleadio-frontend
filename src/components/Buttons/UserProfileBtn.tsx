@@ -1,7 +1,7 @@
 "use client";
 
 import { PopoverDrawer } from "@/components/common/PopoverDrawer/PopoverDrawer";
-import { withAuthBtn, WithAuthBtnProps } from "@/components/Login/withAuthBtn";
+import { withAuthBtn } from "@/components/Login/withAuthBtn";
 import { Button } from "@/components/ui/button";
 import { LogoutBtn } from "./LogoutBtn";
 import { useSession } from "next-auth/react";
@@ -9,6 +9,7 @@ import { useSubscription } from "../Providers/SubscriptionProvider";
 import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
 import { getClientConfig } from "@/config/env";
 import { cn } from "@/lib/utils";
+import { GetComponentProps } from "@/lib/types";
 
 const DISPLAY_USER_KEYS = {
   EMAIL: "EMAIL",
@@ -31,7 +32,7 @@ const UserProfileBtnCore = ({
   className,
   variant,
   size,
-}: WithAuthBtnProps) => {
+}: GetComponentProps<typeof Button>) => {
   const {
     data: subscriptionData,
     isPending,

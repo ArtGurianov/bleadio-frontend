@@ -12,7 +12,6 @@ interface ButtonsBlockProps {
   allowance?: number;
   balance?: number;
   decimals?: number;
-  userId: string | null;
   billingPlan: BillingPlansSolidityKey;
   onRefetchAllowance: () => void;
 }
@@ -24,7 +23,6 @@ export const ButtonsBlock = ({
   allowance,
   balance,
   decimals,
-  userId,
   billingPlan,
   onRefetchAllowance,
 }: ButtonsBlockProps) => {
@@ -35,7 +33,6 @@ export const ButtonsBlock = ({
     <div className="flex flex-col gap-2 justify-center items-center p-8 w-full max-w-[320px]">
       <div className="flex flex-col gap-2 justify-center items-center">
         <ApproveTransactionBtn
-          userId={userId}
           usdContractAddress={usdContractAddress}
           bleadContractAddress={bleadContractAddress}
           priceUsd={priceUsd}
@@ -54,7 +51,6 @@ export const ButtonsBlock = ({
           priceUsd={priceUsd}
           currentAllowanceUsd={allowance}
           currentBalanceUsd={balance}
-          userId={userId}
           billingPlan={billingPlan}
           onSuccess={() => {
             onRefetchAllowance();

@@ -1,7 +1,8 @@
-import { withAuthBtn, WithAuthBtnProps } from "@/components/Login/withAuthBtn";
+import { withAuthBtn } from "@/components/Login/withAuthBtn";
 import { Button } from "@/components/ui/button";
+import { GetComponentProps } from "@/lib/types";
 
-interface GetApiKeyBtnProps extends WithAuthBtnProps {
+interface GetApiKeyBtnProps extends GetComponentProps<typeof Button> {
   userEmail: string | null;
 }
 

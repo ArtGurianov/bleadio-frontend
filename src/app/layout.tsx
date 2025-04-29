@@ -5,8 +5,7 @@ import { Providers } from "@/components/Providers/Providers";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
 import { WalletInfo } from "@/components/WalletInfo/WalletInfo";
-import { Billing } from "@/components/Billing/Billing";
-import { auth } from "@/config/auth";
+import { BillingDialog } from "@/components/Billing/BillingDialog";
 import { QueryInterceptor } from "@/components/common/DialogDrawer/QueryInterceptor";
 import { UserProfileBtn } from "@/components/Buttons/UserProfileBtn";
 import { UserSvgUrl } from "@/components/svg";
@@ -48,8 +47,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   const headersList = await headers();
   const cookieHeader = headersList.get("cookie");
   const initialState = cookieToInitialState(getConfig(), cookieHeader);
@@ -64,7 +61,6 @@ export default async function RootLayout({
             className="absolute top-4 right-8 lg:opacity-60 lg:hover:opacity-100"
             variant="unset"
             size="unset"
-            userId={session?.user.id ? session?.user.id : null}
           >
             <Image
               src={UserSvgUrl}
@@ -77,7 +73,7 @@ export default async function RootLayout({
             />
           </UserProfileBtn>
           <WalletInfo />
-          <Billing userId={session?.user.id ? session?.user.id : null} />
+          <BillingDialog />
           {children}
           <UpgradeBanner />
           <QueryInterceptor config={INTERCEPT_QUERIES_CONFIG} />

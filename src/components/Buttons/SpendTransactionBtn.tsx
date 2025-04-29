@@ -12,9 +12,9 @@ import { FC, useEffect } from "react";
 import { withAuthBtn } from "@/components/Login/withAuthBtn";
 import { GetComponentProps } from "@/lib/types";
 import { useSubscription } from "@/components/Providers/SubscriptionProvider";
+import { useSession } from "next-auth/react";
 
 interface SpendTransactionBtnProps extends GetComponentProps<typeof Button> {
-  userId: string | null;
   currentAllowanceUsd?: number;
   currentBalanceUsd?: number;
   priceUsd?: number;
@@ -29,12 +29,13 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   currentBalanceUsd,
   priceUsd,
   contractAddress,
-  userId,
   billingPlan,
   onSuccess,
   onError,
   children,
 }) => {
+  const { data } = useSession();
+
   const { writeContract, data: hash, isError: isTxError } = useWriteContract();
   const { refetch } = useSubscription();
 
@@ -58,13 +59,13 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   }, [isTxError, isReceiptError]);
 
   const sendTransaction = () => {
-    if (userId) {
+    if (data?.user.id) {
       writeContract({
         abi: bleadContractAbi,
         address: contractAddress,
         functionName: "updateSubscription",
         args: [
-          stringToBytes32(userId),
+          stringToBytes32(data.user.id),
           BILLING_PLANS_SOLIDITY_KEYS_MAP[billingPlan],
         ],
       });

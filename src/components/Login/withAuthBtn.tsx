@@ -4,15 +4,15 @@ import { GetComponentProps } from "@/lib/types";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { GuardedLoginBtn } from "./LoginDialog";
+import { useSession } from "next-auth/react";
 
-export type WithAuthBtnProps = GetComponentProps<typeof Button> & {
-  userId: string | null;
-};
-
-export const withAuthBtn = <T extends WithAuthBtnProps>(component: FC<T>) => {
+export const withAuthBtn = <T extends GetComponentProps<typeof Button>>(
+  component: FC<T>
+) => {
   return (props: T) => {
+    const { data } = useSession();
     const Cmp = component;
-    return props.userId ? (
+    return data?.user ? (
       <Cmp {...props} />
     ) : (
       <GuardedLoginBtn

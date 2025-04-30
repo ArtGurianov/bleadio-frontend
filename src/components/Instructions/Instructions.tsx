@@ -8,7 +8,7 @@ export const Instructions = () => {
       <h2 className="text-center text-3xl font-serif">
         {"Start receiving notifications in just 3 steps:"}
       </h2>
-      <ul className="flex w-full flex-col gap-1 justify-center items-center">
+      <ul className="flex flex-col px-4 justify-center items-stretch gap-4">
         <InstructionsApiKey />
         <InstructionsTelegramBot />
         <InstructionsUsage />

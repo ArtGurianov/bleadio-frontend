@@ -30,9 +30,9 @@
 
 :root {
   --radius: 0.625rem;
-  --background: hsl(176 40% 98%);
+  --background: rgb(248, 252, 252);
   --foreground: hsl(216, 96%, 10%);
-  --card: hsl(32, 33%, 59%);
+  --card: hsl(214, 7%, 17%);
   --card-foreground: hsl(216, 96%, 10%);
   --popover: hsl(180, 32%, 85%);
   --popover-foreground: hsl(216, 96%, 10%);

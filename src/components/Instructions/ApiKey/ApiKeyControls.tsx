@@ -5,7 +5,7 @@ import { GetApiKeyBtn } from "@/components/Buttons/GetApiKeyBtn";
 import { FormStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Clipboard } from "./Clipboard";
+import { Clipboard } from "@/components/common/Clipboard/Clipboard";
 import { useSession } from "next-auth/react";
 
 const API_KEY_MASK = "••••••••-••••-••••-••••-••••••••••••";
@@ -44,16 +44,17 @@ export const ApiKeyControls = () => {
       })}
     >
       <span className="grow">{displayValue}</span>
-      {!!data?.user?.apiKey ? <Clipboard apiKey={data.user.apiKey} /> : null}
+      {!!data?.user?.apiKey ? (
+        <Clipboard value={data.user.apiKey} className="w-6 self-stretch" />
+      ) : null}
       <GetApiKeyBtn
-        userId={data?.user?.id || null}
         disabled={status === "LOADING"}
         userEmail={data?.user?.email || null}
         onClick={() => {
           handleGetApiKey();
         }}
       >
-        {data?.user?.apiKey ? "RESET" : "GET"}
+        {data?.user?.apiKey ? "Reset" : "Get"}
       </GetApiKeyBtn>
     </div>
   );

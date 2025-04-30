@@ -1,19 +1,31 @@
 "use client";
 
-import { CheckSvgUrl, ClipboardSvgUrl } from "@/components/svg";
+import {
+  CheckLightSvgUrl,
+  CheckSvgUrl,
+  ClipboardLightSvgUrl,
+  ClipboardSvgUrl,
+} from "@/components/svg";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 interface ClipboardProps {
-  apiKey: string;
+  value: string;
+  className: string;
+  theme?: "dark" | "light";
 }
 
-export const Clipboard = ({ apiKey }: ClipboardProps) => {
+export const Clipboard = ({
+  value,
+  className,
+  theme = "dark",
+}: ClipboardProps) => {
   const [isCopied, setIsCopied] = useState(false);
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(apiKey).then(() => {
+    navigator.clipboard.writeText(value).then(() => {
       setIsCopied(true);
       setTimeout(() => {
         setIsCopied(false);
@@ -22,7 +34,7 @@ export const Clipboard = ({ apiKey }: ClipboardProps) => {
   };
 
   return (
-    <div className="relative w-6 self-stretch">
+    <div className={cn("relative", className)}>
       <AnimatePresence>
         {!isCopied ? (
           <motion.div
@@ -45,7 +57,7 @@ export const Clipboard = ({ apiKey }: ClipboardProps) => {
               }}
             >
               <Image
-                src={ClipboardSvgUrl}
+                src={theme === "dark" ? ClipboardSvgUrl : ClipboardLightSvgUrl}
                 className="w-6"
                 alt="clipboard"
                 width="0"
@@ -68,7 +80,7 @@ export const Clipboard = ({ apiKey }: ClipboardProps) => {
             }}
           >
             <Image
-              src={CheckSvgUrl}
+              src={theme === "dark" ? CheckSvgUrl : CheckLightSvgUrl}
               className="w-6"
               alt="check"
               width="0"

@@ -119,7 +119,7 @@ export const BillingDialog = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-mono">
-            {"UPGRADE TO PRO"}
+            {"blead.io PRO PLAN"}
           </DialogTitle>
           <DialogDescription className="text-center font-sans font-medium text-md text-primary underline underline-offset-4">
             {"Jump from 100 to 5000 telegram notifications per month!"}

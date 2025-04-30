@@ -19,7 +19,7 @@ export const UpgradeBanner = () => {
   return (
     <div
       className={cn(
-        "fixed flex flex-col gap-2 w-full bottom-0 translate-y-full px-4 py-4 bg-muted/90 justify-center items-center border-t-2 rounded-t-lg",
+        "fixed flex flex-col gap-2 w-full bottom-0 translate-y-full px-4 py-4 bg-card/90 justify-center items-center border-t-2 rounded-t-lg",
         {
           "transform -translate-y-0 duration-800 delay-1000 ease-in-out":
             isVisible,

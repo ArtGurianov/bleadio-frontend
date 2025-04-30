@@ -55,7 +55,7 @@ export const InstructionsUsage = () => {
           <Clipboard
             theme="light"
             value={CODEBLOCKS[lang]}
-            className="absolute bottom-4 right-4 w-8 h-8"
+            className="absolute top-4 right-4 w-8 h-8"
           />
           <CodeBlock
             customStyle={{ borderRadius: "0px" }}

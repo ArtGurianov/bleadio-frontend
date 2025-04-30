@@ -13,6 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface TooltipPopoverProps {
   className?: string;
@@ -28,7 +29,7 @@ const TooltipWrapper = ({
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
-        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipTrigger>{children}</TooltipTrigger>
         <TooltipContent className={className}>{content}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -42,15 +43,21 @@ const PopoverWrapper = ({
 }: TooltipPopoverProps) => {
   return (
     <Popover>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className={className}>{content}</PopoverContent>
+      <PopoverTrigger>{children}</PopoverTrigger>
+      <PopoverContent
+        className={cn(
+          className,
+          "bg-foreground text-background p-1 rounded-xl text-sm"
+        )}
+      >
+        {content}
+      </PopoverContent>
     </Popover>
   );
 };
 
 export const TooltipPopover = (props: TooltipPopoverProps) => {
   const isWindowOverSM = useBreakpoint("sm");
-
   const Comp = isWindowOverSM ? TooltipWrapper : PopoverWrapper;
   return <Comp {...props} />;
 };

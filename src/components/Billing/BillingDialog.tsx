@@ -14,11 +14,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import { WalletInfo } from "../WalletInfo/WalletInfo";
 
 const ENV_CONFIG = getClientConfig();
 
 export const BillingDialog = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const { address } = useAccount();
 
   const {
@@ -44,7 +45,7 @@ export const BillingDialog = () => {
 
   const {
     data: balanceUsd,
-    isPending: isPendingBalance,
+    isLoading: isLoadingBalance,
     isError: isErrorBalance,
   } = useReadContract({
     abi: usdContractAbi,
@@ -76,7 +77,7 @@ export const BillingDialog = () => {
 
   const {
     data: allowance,
-    isPending: isPendingAllowance,
+    isLoading: isLoadingAllowance,
     isError: isErrorAllowance,
     refetch: refetchAllowance,
   } = useReadContract({
@@ -88,12 +89,12 @@ export const BillingDialog = () => {
   });
 
   const isLoading =
-    isPendingBalance ||
+    isLoadingBalance ||
     isPendingUsdContractAddress ||
     isPendingDecimals ||
     isPendingMonthlyPriceUsd ||
     isPendingAnnualPriceUsd ||
-    isPendingAllowance;
+    isLoadingAllowance;
 
   const isError =
     isErrorBalance ||
@@ -105,32 +106,21 @@ export const BillingDialog = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="w-screen h-screen">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>Share link</DialogTitle>
-          <DialogDescription>
-            Anyone who has this link will be able to view this.
+          <DialogTitle className="text-center text-2xl font-mono">
+            {"UPGRADE TO PRO"}
+          </DialogTitle>
+          <DialogDescription className="text-center font-sans font-medium text-md text-primary underline underline-offset-4">
+            {"Jump from 100 to 5000 telegram notifications per month!"}
           </DialogDescription>
         </DialogHeader>
         {isError ? (
           <p>{"An error occured while getting data from the blockchain"}</p>
         ) : null}
         {isLoading ? <p>{"Loading data from the blockchain"}</p> : null}
-        <p>{`User balance: ${Number(
-          formatUnits(
-            balanceUsd ? (balanceUsd as bigint) : BigInt(0),
-            Number(decimals)
-          )
-        )}`}</p>
-        <p>{`Montly price USD: ${monthlyPriceUsd}`}</p>
-        <p>{`Montly price USD: ${annualPriceUsd}`}</p>
-        <p>{`Allowance USD: ${Number(
-          formatUnits(
-            allowance ? (allowance as bigint) : BigInt(0),
-            Number(decimals)
-          )
-        )}`}</p>
-        <div className="w-full flex gap-8 flex-wrap justify-center items-center">
+        <WalletInfo />
+        <div className="w-full flex gap-8 justify-center items-center">
           <ButtonsBlock
             usdContractAddress={usdContractAddress as `0x${string}` | undefined}
             bleadContractAddress={

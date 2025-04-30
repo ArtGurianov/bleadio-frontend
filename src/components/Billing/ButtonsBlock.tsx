@@ -30,8 +30,17 @@ export const ButtonsBlock = ({
   const [isSpent, setIsSpent] = useState(false);
 
   return (
-    <div className="flex flex-col gap-2 justify-center items-center p-8 w-full max-w-[320px]">
-      <div className="flex flex-col gap-2 justify-center items-center">
+    <div className="flex relative flex-col gap-3 justify-center items-center py-8 w-full max-w-[320px] border-2 rounded-xl bg-gradient-to-br from-card/40 to-muted/40">
+      {billingPlan === "ANNUAL" ? (
+        <span className="absolute top-2 right-0 px-2 bg-popover/60 rounded-l-md text-primary font-serif">
+          {"Save 30%"}
+        </span>
+      ) : null}
+      <h2 className="text-3xl font-light font-mono text-foreground/80">
+        {billingPlan === "MONTLY" ? "30 days" : "360 days"}
+      </h2>
+      <h3 className="text-4xl font-semibold font-sans bg-accent/20 border-y-2 border-accent w-full text-center text-accent-foreground py-1">{`${priceUsd}$`}</h3>
+      <div className="flex flex-col gap-2 justify-center items-stretch mt-2">
         <ApproveTransactionBtn
           usdContractAddress={usdContractAddress}
           bleadContractAddress={bleadContractAddress}

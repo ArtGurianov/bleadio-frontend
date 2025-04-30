@@ -61,6 +61,13 @@ export const bleadContractAbi = [
 export const usdContractAbi = [
   {
     type: "function",
+    name: "symbol",
+    inputs: [],
+    outputs: [{ name: "", type: "string", internalType: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "balanceOf",
     stateMutability: "view",
     inputs: [{ name: "account", type: "address" }],

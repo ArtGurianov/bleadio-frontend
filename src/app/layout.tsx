@@ -4,15 +4,14 @@ import { InterceptQueryData } from "@/lib/types";
 import { Providers } from "@/components/Providers/Providers";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
-import { WalletInfo } from "@/components/WalletInfo/WalletInfo";
 import { BillingDialog } from "@/components/Billing/BillingDialog";
 import { QueryInterceptor } from "@/components/common/DialogDrawer/QueryInterceptor";
 import { UserProfileBtn } from "@/components/Buttons/UserProfileBtn";
 import { UserSvgUrl } from "@/components/svg";
-import getConfig from "next/config";
-import Image from "next/image";
-import "./globals.css";
 import { UpgradeBanner } from "@/components/UpgradeBanner/UpgradeBanner";
+import Image from "next/image";
+import getConfig from "next/config";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,7 +71,6 @@ export default async function RootLayout({
               priority
             />
           </UserProfileBtn>
-          <WalletInfo />
           <BillingDialog />
           {children}
           <UpgradeBanner />

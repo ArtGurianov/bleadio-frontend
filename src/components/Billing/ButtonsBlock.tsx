@@ -3,7 +3,7 @@
 import { ApproveTransactionBtn } from "@/components/Buttons/ApproveTransactionBtn";
 import { SpendTransactionBtn } from "@/components/Buttons/SpendTransactionBtn";
 import { BillingPlansSolidityKey } from "./constants";
-import { useState } from "react";
+import { toast } from "sonner";
 
 interface ButtonsBlockProps {
   usdContractAddress?: `0x${string}`;
@@ -26,9 +26,6 @@ export const ButtonsBlock = ({
   billingPlan,
   onRefetchAllowance,
 }: ButtonsBlockProps) => {
-  const [isError, setIsError] = useState(false);
-  const [isSpent, setIsSpent] = useState(false);
-
   return (
     <div className="flex relative flex-col gap-3 justify-center items-center py-8 w-full max-w-[320px] border-2 rounded-xl bg-gradient-to-br from-card/40 to-muted/40">
       {billingPlan === "ANNUAL" ? (
@@ -50,9 +47,10 @@ export const ButtonsBlock = ({
           decimals={decimals}
           onSuccess={() => {
             onRefetchAllowance();
+            toast("Successfully updated allowance!");
           }}
           onError={() => {
-            setIsError(true);
+            toast("An error occured while performing a transaction");
           }}
         >{`Approve ${priceUsd} USD`}</ApproveTransactionBtn>
         <SpendTransactionBtn
@@ -63,17 +61,15 @@ export const ButtonsBlock = ({
           billingPlan={billingPlan}
           onSuccess={() => {
             onRefetchAllowance();
-            setIsSpent(true);
+            toast("Well done! Successfully updated your subscription!");
           }}
           onError={() => {
-            setIsError(true);
+            toast("An error occured while performing a transaction");
           }}
         >
           {"Purchase"}
         </SpendTransactionBtn>
       </div>
-      {isError ? <p>{"A blockchain error occured."}</p> : null}
-      {isSpent ? <p>{"Well done!"}</p> : null}
     </div>
   );
 };

@@ -13,14 +13,24 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WalletInfo } from "../WalletInfo/WalletInfo";
 
 const ENV_CONFIG = getClientConfig();
 
 export const BillingDialog = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const { address } = useAccount();
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  useEffect(() => {
+    document.addEventListener("open-billing-dialog", handleOpen);
+    return () => {
+      document.removeEventListener("open-billing-dialog", handleOpen);
+    };
+  }, []);
 
   const {
     data: usdContractAddress,

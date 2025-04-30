@@ -84,11 +84,11 @@ export const WalletInfoConnected = () => {
   return (
     <div className="flex flex-wrap gap-4 justify-between items-center w-full px-6">
       <div className="flex flex-col gap-1 justify-center items-start">
-        <p className="flex gap-2 justify-center items-center flex-wrap font-sans font-medium">
+        <p className="flex gap-2 justify-center items-center flex-wrap font-mono font-medium">
           {"Connected:"}
           <TruncatedString cutFrom="middle">{address!}</TruncatedString>
         </p>
-        <p className="flex justify-center items-center gap-1">
+        <p className="flex justify-center items-center gap-1 font-mono">
           {`Balance: ${displayBalance} ${symbol}`}
           <TooltipPopover
             content={`${symbol} token address is ${usdContractAddress} on BNB chain`}

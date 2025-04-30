@@ -12,6 +12,7 @@ import { UpgradeBanner } from "@/components/UpgradeBanner/UpgradeBanner";
 import Image from "next/image";
 import getConfig from "next/config";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -76,6 +77,7 @@ export default async function RootLayout({
           <UpgradeBanner />
           <QueryInterceptor config={INTERCEPT_QUERIES_CONFIG} />
         </Providers>
+        <Toaster />
       </body>
     </html>
   );

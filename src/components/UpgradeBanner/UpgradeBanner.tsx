@@ -5,8 +5,10 @@ import { cn } from "@/lib/utils";
 import { BILLING_PLANS } from "@/lib/utils/contsants";
 import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
 import { Button } from "@/components/ui/button";
+import { useRef } from "react";
 
 export const UpgradeBanner = () => {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { data } = useSubscription();
 
   const isVisible =
@@ -30,7 +32,17 @@ export const UpgradeBanner = () => {
       </p>
       <p className="flex gap-2 justify-center items-center">
         {"Need more?"}
-        <Button>{"Upgrade to PRO"}</Button>
+        <Button
+          ref={buttonRef}
+          onClick={() => {
+            const event = new CustomEvent("open-billing-dialog", {
+              bubbles: true,
+            });
+            buttonRef.current?.dispatchEvent(event);
+          }}
+        >
+          {"Upgrade to PRO"}
+        </Button>
       </p>
     </div>
   );

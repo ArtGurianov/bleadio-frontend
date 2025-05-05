@@ -11,16 +11,16 @@ import { useSession } from "next-auth/react";
 const API_KEY_MASK = "••••••••-••••-••••-••••-••••••••••••";
 
 export const ApiKeyControls = () => {
-  const { data, update } = useSession();
+  const { data: sessionData, update: updateSession } = useSession();
 
   const [status, setStatus] = useState<FormStatus>("PENDING");
 
   const handleGetApiKey = () => {
-    const isReset = !!data?.user?.apiKey;
+    const isReset = !!sessionData?.user?.apiKey;
     setStatus("LOADING");
     getApiKey(isReset)
       .then((res) => {
-        update({ apiKey: res.data }).finally(() => {
+        updateSession({ apiKey: res.data }).finally(() => {
           setStatus(res.success ? "SUCCESS" : "ERROR");
         });
       })
@@ -29,7 +29,7 @@ export const ApiKeyControls = () => {
       });
   };
 
-  let displayValue = data?.user?.apiKey || API_KEY_MASK;
+  let displayValue = sessionData?.user?.apiKey || API_KEY_MASK;
   if (status === "LOADING") {
     displayValue = "loading...";
   }
@@ -44,17 +44,20 @@ export const ApiKeyControls = () => {
       })}
     >
       <span className="grow">{displayValue}</span>
-      {!!data?.user?.apiKey ? (
-        <Clipboard value={data.user.apiKey} className="w-6 self-stretch" />
+      {!!sessionData?.user?.apiKey ? (
+        <Clipboard
+          value={sessionData.user.apiKey}
+          className="w-6 self-stretch"
+        />
       ) : null}
       <GetApiKeyBtn
         disabled={status === "LOADING"}
-        userEmail={data?.user?.email || null}
+        userEmail={sessionData?.user?.email || null}
         onClick={() => {
           handleGetApiKey();
         }}
       >
-        {data?.user?.apiKey ? "Reset" : "Get"}
+        {sessionData?.user?.apiKey ? "Reset" : "Get"}
       </GetApiKeyBtn>
     </div>
   );

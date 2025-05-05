@@ -36,7 +36,9 @@ export const ButtonsBlock = ({
       <h2 className="text-3xl font-light font-mono text-foreground/80">
         {billingPlan === "MONTLY" ? "30 days" : "360 days"}
       </h2>
-      <h3 className="text-4xl font-semibold font-sans bg-accent/20 border-y-2 border-accent w-full text-center text-accent-foreground py-1">{`${priceUsd}$`}</h3>
+      <h3 className="text-4xl font-semibold font-sans bg-accent/20 border-y-2 border-accent w-full text-center text-accent-foreground py-1">
+        {priceUsd ? `${priceUsd}$` : "..."}
+      </h3>
       <div className="flex flex-col gap-2 justify-center items-stretch mt-2">
         <ApproveTransactionBtn
           usdContractAddress={usdContractAddress}
@@ -52,7 +54,7 @@ export const ButtonsBlock = ({
           onError={() => {
             toast("An error occured while performing a transaction");
           }}
-        >{`Approve ${priceUsd} USD`}</ApproveTransactionBtn>
+        >{`Approve ${priceUsd || ""} USD`}</ApproveTransactionBtn>
         <SpendTransactionBtn
           contractAddress={bleadContractAddress}
           priceUsd={priceUsd}

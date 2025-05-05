@@ -10,15 +10,16 @@ export const withAuthBtn = <T extends GetComponentProps<typeof Button>>(
   component: FC<T>
 ) => {
   return (props: T) => {
-    const { data } = useSession();
+    const { data, status } = useSession();
     const Cmp = component;
     return data?.user ? (
       <Cmp {...props} />
     ) : (
       <GuardedLoginBtn
+        disabled={status === "loading"}
         size={props.size}
         variant={props.variant}
-        children={props.children}
+        children={status === "loading" ? "loading..." : props.children}
         className={props.className}
       />
     );

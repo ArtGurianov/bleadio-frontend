@@ -8,41 +8,25 @@ import { getClientConfig } from "@/config/env";
 import { TruncatedString } from "../common/TruncatedString/TruncatedString";
 import { TooltipPopover } from "../common/TooltipPopover/TooltipPopover";
 import { AlertCircleIcon } from "lucide-react";
+import { feesTokenDetailsSchema } from "@/lib/schemas/feesTokenDetailsSchema";
+
+const ENV_CONFIG = getClientConfig();
 
 export const WalletInfoConnected = () => {
   const { address } = useAccount();
 
   const {
-    data: usdContractAddress,
-    isPending: isPendingUsdContractAddress,
-    isError: isErrorUsdContractAddress,
+    data: feesContractDetails,
+    isPending: isPendingFeesContractDetails,
+    isError: isErrorFeesContractDetails,
   } = useReadContract({
     abi: bleadContractAbi,
-    address: getClientConfig().NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-    functionName: "USD_CONTRACT_ADDRESS",
+    address: ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
+    functionName: "getFeesTokenDetails",
   });
 
-  const {
-    data: decimals,
-    isPending: isPendingDecimals,
-    isError: isErrorDecimals,
-  } = useReadContract({
-    abi: usdContractAbi,
-    address: usdContractAddress as `0x${string}`,
-    functionName: "decimals",
-    query: { enabled: !!usdContractAddress },
-  });
-
-  const {
-    data: symbol,
-    isPending: isPendingSymbol,
-    isError: isErrorSymbol,
-  } = useReadContract({
-    abi: usdContractAbi,
-    address: usdContractAddress as `0x${string}`,
-    functionName: "symbol",
-    query: { enabled: !!usdContractAddress },
-  });
+  const validationResult =
+    feesTokenDetailsSchema.safeParse(feesContractDetails);
 
   const {
     data: balanceUsd,
@@ -50,33 +34,22 @@ export const WalletInfoConnected = () => {
     isError: isErrorBalance,
   } = useReadContract({
     abi: usdContractAbi,
-    address: usdContractAddress as `0x${string}`,
+    address: validationResult.data?.tokenAddress as `0x${string}`,
     functionName: "balanceOf",
-    args: [address],
-    query: { enabled: !!address },
+    args: [address!],
+    query: { enabled: validationResult.success && !!address },
   });
 
-  const isLoading =
-    isPendingUsdContractAddress ||
-    isLoadingBalance ||
-    isPendingDecimals ||
-    isPendingSymbol;
-  const isError =
-    isErrorUsdContractAddress ||
-    isErrorBalance ||
-    isErrorDecimals ||
-    isErrorSymbol;
+  const isLoading = isPendingFeesContractDetails || isLoadingBalance;
+
+  const isError = isErrorFeesContractDetails || isErrorBalance;
 
   let displayBalance = "loading...";
-  if (
-    typeof balanceUsd === "bigint" &&
-    typeof decimals === "number" &&
-    typeof symbol === "string"
-  ) {
+  if (validationResult.success && typeof balanceUsd === "bigint") {
     displayBalance = `${formatUnits(
-      balanceUsd ? (balanceUsd as bigint) : BigInt(0),
-      Number(decimals)
-    )}${symbol}`;
+      balanceUsd,
+      validationResult.data.decimals
+    )}${validationResult.data.symbol}`;
   }
   if (isLoading) {
     displayBalance = "loading...";
@@ -94,10 +67,9 @@ export const WalletInfoConnected = () => {
         </p>
         <p className="flex justify-center items-center gap-1 font-mono">
           {`Balance: ${displayBalance}`}
-          {typeof symbol === "string" &&
-          typeof usdContractAddress === "string" ? (
+          {validationResult.success ? (
             <TooltipPopover
-              content={`${symbol} token address is ${usdContractAddress} on BNB chain`}
+              content={`${validationResult.data.symbol} token address is ${validationResult.data.tokenAddress} on BNB chain`}
             >
               <AlertCircleIcon size={16} className="text-muted" />
             </TooltipPopover>

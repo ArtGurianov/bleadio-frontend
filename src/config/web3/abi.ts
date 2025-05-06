@@ -1,19 +1,37 @@
 export const bleadContractAbi = [
   {
     type: "function",
-    name: "USD_CONTRACT_ADDRESS",
+    name: "getFeesTokenDetails",
+    inputs: [],
+    outputs: [
+      {
+        name: "_feesTokenDetails",
+        type: "tuple",
+        internalType: "struct IMyDaogsDividends.FeesTokenDetails",
+        components: [
+          { name: "tokenAddress", type: "address", internalType: "address" },
+          { name: "decimals", type: "uint8", internalType: "uint8" },
+          { name: "symbol", type: "string", internalType: "string" },
+          { name: "name", type: "string", internalType: "string" },
+          {
+            name: "minClaimableUnitsAmount",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
+      },
+    ],
     stateMutability: "view",
-    outputs: [{ type: "address" }],
   },
   {
     type: "function",
-    name: "MONTHLY_PRICE_USD",
+    name: "FEES_TOKEN_MONTHLY_PRICE",
     stateMutability: "view",
     outputs: [{ type: "uint256" }],
   },
   {
     type: "function",
-    name: "ANNUAL_PRICE_USD",
+    name: "FEES_TOKEN_ANNUAL_PRICE",
     stateMutability: "view",
     outputs: [{ type: "uint256" }],
   },
@@ -61,23 +79,10 @@ export const bleadContractAbi = [
 export const usdContractAbi = [
   {
     type: "function",
-    name: "symbol",
-    inputs: [],
-    outputs: [{ name: "", type: "string", internalType: "string" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "balanceOf",
     stateMutability: "view",
     inputs: [{ name: "account", type: "address" }],
     outputs: [{ type: "uint256" }],
-  },
-  {
-    type: "function",
-    name: "decimals",
-    stateMutability: "view",
-    outputs: [{ type: "uint8" }],
   },
   {
     type: "function",

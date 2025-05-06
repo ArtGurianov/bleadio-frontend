@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 import { WalletInfo } from "../WalletInfo/WalletInfo";
+import { feesTokenDetailsSchema } from "@/lib/schemas/feesTokenDetailsSchema";
 
 const ENV_CONFIG = getClientConfig();
 
@@ -33,56 +34,48 @@ export const BillingDialog = () => {
   }, []);
 
   const {
-    data: usdContractAddress,
-    isPending: isPendingUsdContractAddress,
-    isError: isErrorUsdContractAddress,
+    data: feesContractDetails,
+    isPending: isPendingFeesContractDetails,
+    isError: isErrorFeesContractDetails,
   } = useReadContract({
     abi: bleadContractAbi,
     address: ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-    functionName: "USD_CONTRACT_ADDRESS",
+    functionName: "getFeesTokenDetails",
   });
 
-  const {
-    data: decimals,
-    isPending: isPendingDecimals,
-    isError: isErrorDecimals,
-  } = useReadContract({
-    abi: usdContractAbi,
-    address: usdContractAddress as `0x${string}`,
-    functionName: "decimals",
-    query: { enabled: !!usdContractAddress },
-  });
+  const validationResult =
+    feesTokenDetailsSchema.safeParse(feesContractDetails);
 
   const {
-    data: balanceUsd,
+    data: balance,
     isLoading: isLoadingBalance,
     isError: isErrorBalance,
   } = useReadContract({
     abi: usdContractAbi,
-    address: usdContractAddress as `0x${string}`,
+    address: validationResult.data?.tokenAddress as `0x${string}`,
     functionName: "balanceOf",
-    args: [address],
-    query: { enabled: !!address },
+    args: [address!],
+    query: { enabled: validationResult.success && !!address },
   });
 
   const {
-    data: monthlyPriceUsd,
-    isPending: isPendingMonthlyPriceUsd,
-    isError: isErrorMonthlyPriceUsd,
+    data: monthlyPrice,
+    isPending: isPendingMonthlyPrice,
+    isError: isErrorMonthlyPrice,
   } = useReadContract({
     abi: bleadContractAbi,
     address: ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-    functionName: "MONTHLY_PRICE_USD",
+    functionName: "FEES_TOKEN_MONTHLY_PRICE",
   });
 
   const {
-    data: annualPriceUsd,
-    isPending: isPendingAnnualPriceUsd,
-    isError: isErrorAnnualPriceUsd,
+    data: annualPrice,
+    isPending: isPendingAnnualPrice,
+    isError: isErrorAnnualPrice,
   } = useReadContract({
     abi: bleadContractAbi,
     address: ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-    functionName: "ANNUAL_PRICE_USD",
+    functionName: "FEES_TOKEN_ANNUAL_PRICE",
   });
 
   const {
@@ -92,26 +85,24 @@ export const BillingDialog = () => {
     refetch: refetchAllowance,
   } = useReadContract({
     abi: usdContractAbi,
-    address: usdContractAddress as `0x${string}`,
+    address: validationResult.data?.tokenAddress as `0x${string}`,
     functionName: "allowance",
-    args: [address, ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS],
-    query: { enabled: !!usdContractAddress && !!address },
+    args: [address!, ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`],
+    query: { enabled: validationResult.success && !!address },
   });
 
   const isLoading =
+    isPendingFeesContractDetails ||
     isLoadingBalance ||
-    isPendingUsdContractAddress ||
-    isPendingDecimals ||
-    isPendingMonthlyPriceUsd ||
-    isPendingAnnualPriceUsd ||
+    isPendingMonthlyPrice ||
+    isPendingAnnualPrice ||
     isLoadingAllowance;
 
   const isError =
+    isErrorFeesContractDetails ||
     isErrorBalance ||
-    isErrorDecimals ||
-    isErrorUsdContractAddress ||
-    isErrorMonthlyPriceUsd ||
-    isErrorAnnualPriceUsd ||
+    isErrorMonthlyPrice ||
+    isErrorAnnualPrice ||
     isErrorAllowance;
 
   return (
@@ -132,48 +123,66 @@ export const BillingDialog = () => {
         <WalletInfo />
         <div className="w-full flex gap-8 justify-center items-center">
           <ButtonsBlock
-            usdContractAddress={usdContractAddress as `0x${string}` | undefined}
+            usdContractAddress={
+              validationResult.data?.tokenAddress as `0x${string}` | undefined
+            }
             bleadContractAddress={
               ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`
             }
-            priceUsd={monthlyPriceUsd as number | undefined}
-            allowance={Number(
-              formatUnits(
-                allowance ? (allowance as bigint) : BigInt(0),
-                Number(decimals)
-              )
-            )}
-            balance={Number(
-              formatUnits(
-                balanceUsd ? (balanceUsd as bigint) : BigInt(0),
-                Number(decimals)
-              )
-            )}
-            decimals={decimals as number | undefined}
+            priceUsd={
+              typeof monthlyPrice === "bigint"
+                ? Number(monthlyPrice)
+                : undefined
+            }
+            allowance={
+              typeof allowance === "bigint" && validationResult.success
+                ? Number(
+                    formatUnits(allowance, validationResult.data?.decimals)
+                  )
+                : undefined
+            }
+            balance={
+              typeof balance === "bigint" && validationResult.success
+                ? Number(formatUnits(balance, validationResult.data.decimals))
+                : undefined
+            }
+            decimals={
+              validationResult.success
+                ? validationResult.data.decimals
+                : undefined
+            }
             billingPlan={BILLING_PLANS_SOLIDITY_KEYS.MONTLY}
             onRefetchAllowance={() => {
               refetchAllowance();
             }}
           />
           <ButtonsBlock
-            usdContractAddress={usdContractAddress as `0x${string}` | undefined}
+            usdContractAddress={
+              validationResult.success
+                ? (validationResult.data.tokenAddress as `0x${string}`)
+                : undefined
+            }
             bleadContractAddress={
               ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`
             }
-            priceUsd={annualPriceUsd as number | undefined}
-            allowance={Number(
-              formatUnits(
-                allowance ? (allowance as bigint) : BigInt(0),
-                Number(decimals)
-              )
-            )}
-            balance={Number(
-              formatUnits(
-                balanceUsd ? (balanceUsd as bigint) : BigInt(0),
-                Number(decimals)
-              )
-            )}
-            decimals={decimals as number | undefined}
+            priceUsd={
+              typeof annualPrice === "bigint" ? Number(annualPrice) : undefined
+            }
+            allowance={
+              typeof allowance === "bigint" && validationResult.success
+                ? Number(formatUnits(allowance, validationResult.data.decimals))
+                : undefined
+            }
+            balance={
+              typeof balance === "bigint" && validationResult.success
+                ? Number(formatUnits(balance, validationResult.data.decimals))
+                : undefined
+            }
+            decimals={
+              validationResult.success
+                ? validationResult.data.decimals
+                : undefined
+            }
             billingPlan={BILLING_PLANS_SOLIDITY_KEYS.ANNUAL}
             onRefetchAllowance={() => {
               refetchAllowance();

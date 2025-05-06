@@ -52,12 +52,6 @@ export const SubscriptionProvider = ({
     query: { enabled: !!session?.user?.id },
   });
 
-  useEffect(() => {
-    if (result.error) {
-      console.log(result.error.message);
-    }
-  }, [result.error]);
-
   const returnValue = useMemo(() => {
     const { data, isError, isPending, isLoading, refetch } = result;
     const value: SubscriptionProviderData = {

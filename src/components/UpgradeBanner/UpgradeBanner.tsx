@@ -26,11 +26,11 @@ export const UpgradeBanner = () => {
         }
       )}
     >
-      <p className="flex flex-col gap-1 lg:flex-row justify-center items-center">
+      <p className="flex flex-col gap-1 lg:flex-row justify-center items-center text-secondary">
         <span>{"You’re currently on a LITE plan"}</span>
         <span>{"limited to 100 notifications/month."}</span>
       </p>
-      <p className="flex gap-2 justify-center items-center">
+      <p className="flex gap-2 justify-center items-center text-secondary">
         {"Need more?"}
         <Button
           ref={buttonRef}

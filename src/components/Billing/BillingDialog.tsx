@@ -50,6 +50,7 @@ export const BillingDialog = () => {
     data: balance,
     isLoading: isLoadingBalance,
     isError: isErrorBalance,
+    refetch: refetchBalance,
   } = useReadContract({
     abi: usdContractAbi,
     address: validationResult.data?.tokenAddress as `0x${string}`,
@@ -155,6 +156,9 @@ export const BillingDialog = () => {
             onRefetchAllowance={() => {
               refetchAllowance();
             }}
+            onRefetchBalance={() => {
+              refetchBalance();
+            }}
           />
           <ButtonsBlock
             usdContractAddress={
@@ -186,6 +190,9 @@ export const BillingDialog = () => {
             billingPlan={BILLING_PLANS_SOLIDITY_KEYS.ANNUAL}
             onRefetchAllowance={() => {
               refetchAllowance();
+            }}
+            onRefetchBalance={() => {
+              refetchBalance();
             }}
           />
         </div>

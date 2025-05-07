@@ -14,6 +14,7 @@ interface ButtonsBlockProps {
   decimals?: number;
   billingPlan: BillingPlansSolidityKey;
   onRefetchAllowance: () => void;
+  onRefetchBalance: () => void;
 }
 
 export const ButtonsBlock = ({
@@ -25,6 +26,7 @@ export const ButtonsBlock = ({
   decimals,
   billingPlan,
   onRefetchAllowance,
+  onRefetchBalance,
 }: ButtonsBlockProps) => {
   return (
     <div className="flex relative flex-col gap-3 justify-center items-center py-8 w-full max-w-[320px] border-2 rounded-xl bg-gradient-to-br from-card/40 to-muted/40">
@@ -37,7 +39,7 @@ export const ButtonsBlock = ({
         {billingPlan === "MONTLY" ? "30 days" : "360 days"}
       </h2>
       <h3 className="text-4xl font-semibold font-sans bg-accent/20 border-y-2 border-accent w-full text-center text-accent-foreground py-1">
-        {priceUsd ? `${priceUsd}$` : "..."}
+        {typeof priceUsd === "number" ? `${priceUsd}$` : "..."}
       </h3>
       <div className="flex flex-col gap-2 justify-center items-stretch mt-2">
         <ApproveTransactionBtn
@@ -63,6 +65,7 @@ export const ButtonsBlock = ({
           billingPlan={billingPlan}
           onSuccess={() => {
             onRefetchAllowance();
+            onRefetchBalance();
             toast("Well done! Successfully updated your subscription!");
           }}
           onError={() => {

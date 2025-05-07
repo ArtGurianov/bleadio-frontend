@@ -69,7 +69,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
         isFetching ||
         !usdContractAddress ||
         !decimals ||
-        !priceUsd ||
+        typeof priceUsd !== "number" ||
         typeof currentAllowanceUsd !== "number" ||
         currentAllowanceUsd >= priceUsd ||
         typeof currentBalanceUsd !== "number" ||

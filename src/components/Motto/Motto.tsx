@@ -3,11 +3,17 @@ export const Motto = () => {
     <div className="flex content-center justify-center">
       <div className="bg-primary/40 my-4 border-l-4 border-primary p-2 text-center">
         <span className="font-mono text-wrap text-xl">
-          {"Receive custom notifications from your e-businesses"}
+          {"Receive custom "}
+          <span className="text-2xl">{"notifications"}</span>
+          <span>{" from your e-businesses"}</span>
           <br />
-          {"straight to your personal telegram."}
+          {"straight to your "}
+          <span className="text-2xl">{"personal telegram."}</span>
           <br />
-          {"Easy integration. Free plan available."}
+          <span className="text-2xl">{"Easy"}</span>
+          {" integration. "}
+          <span className="text-2xl">{"Free plan"}</span>
+          {" available."}
         </span>
       </div>
     </div>

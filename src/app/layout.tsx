@@ -54,7 +54,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased py-4`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased p-4 flex justify-center items-center`}
       >
         <Providers initialState={initialState}>
           <UserProfileBtn
@@ -73,7 +73,9 @@ export default async function RootLayout({
             />
           </UserProfileBtn>
           <BillingDialog />
-          {children}
+          <div className="flex flex-col justify-center items-center max-w-[720px]">
+            {children}
+          </div>
           <UpgradeBanner />
           <QueryInterceptor config={INTERCEPT_QUERIES_CONFIG} />
         </Providers>

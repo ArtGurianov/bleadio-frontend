@@ -23,7 +23,7 @@ export const InlineInfo = ({
         className
       )}
     >
-      <span className="flex gap-1 px-2 bg-muted-foreground/20 justify-center items-center border-r border-muted-foreground/40 font-medium text-muted-foreground/80">
+      <span className="flex gap-1 px-2 bg-primary/30 justify-center items-center border-r border-muted-foreground/40 font-medium text-muted-foreground/80">
         {label}
         {description ? (
           <TooltipPopover content={description}>
@@ -31,7 +31,7 @@ export const InlineInfo = ({
           </TooltipPopover>
         ) : null}
       </span>
-      <div className="flex gap-1 grow items-center justify-center">
+      <div className="flex gap-1 grow items-center justify-center bg-accent/80">
         {children ? (
           <div className="flex grow justify-center items-center text-center">
             {children}

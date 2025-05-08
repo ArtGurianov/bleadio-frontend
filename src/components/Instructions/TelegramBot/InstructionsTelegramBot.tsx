@@ -7,7 +7,7 @@ export const InstructionsTelegramBot = () => {
       <h3 className="w-full px-2 font-mono">
         {"2. Register your key in Telegram Bot"}
       </h3>
-      <p className="text-center border-2 border-muted-foreground/80 py-1 px-2 rounded-md">
+      <p className="text-center border-2 border-muted-foreground/80 bg-accent/80 py-1 px-2 rounded-md">
         {"Start the "}
         <Button>
           <Link href="https://t.me/PingLeadBot">{"@PingLeadBot"}</Link>

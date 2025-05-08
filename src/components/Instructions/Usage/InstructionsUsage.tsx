@@ -31,7 +31,7 @@ export const InstructionsUsage = () => {
           {CODEBLOCKS_ORDER.map((each) => (
             <li
               className={cn(
-                "grow text-center px-2 py-1 bg-muted-foreground/20 border-x-1 border-card",
+                "grow text-center px-2 py-1 bg-primary/30 border-x-1 border-card",
                 {
                   "bg-card text-popover": each === lang,
                 }

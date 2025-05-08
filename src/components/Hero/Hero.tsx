@@ -3,7 +3,7 @@ import { BleadSvgUrl } from "../svg";
 
 export const Hero = () => {
   return (
-    <div className="flex flex-wrap justify-center items-center gap-2">
+    <div className="flex flex-wrap-reverse justify-center items-center gap-2">
       <div>
         <Image
           src={BleadSvgUrl}

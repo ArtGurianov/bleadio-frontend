@@ -1,7 +1,7 @@
 export const Motto = () => {
   return (
     <div className="flex content-center justify-center">
-      <div className="bg-primary/40 my-4 border-l-4 border-primary p-2 text-center">
+      <div className="bg-muted-foreground/20 my-4 border-l-4 border-muted-foreground/80 p-2 text-center">
         <span className="font-mono text-wrap text-xl">
           {"Receive custom "}
           <span className="text-2xl">{"notifications"}</span>

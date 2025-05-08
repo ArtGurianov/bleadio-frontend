@@ -35,13 +35,13 @@ export const ButtonsBlock = ({
           {"Save 30%"}
         </span>
       ) : null}
-      <h2 className="text-3xl font-light font-mono text-foreground/80">
+      <h2 className="text-3xl font-light font-mono text-foreground/80 text-center">
         {billingPlan === "MONTLY" ? "30 days" : "360 days"}
       </h2>
       <h3 className="text-4xl font-semibold font-sans bg-accent/20 border-y-2 border-accent w-full text-center text-accent-foreground py-1">
         {typeof priceUsd === "number" ? `${priceUsd}$` : "..."}
       </h3>
-      <div className="flex flex-col gap-2 justify-center items-stretch mt-2">
+      <div className="flex flex-col gap-2 justify-center items-stretch mt-2 px-2">
         <ApproveTransactionBtn
           usdContractAddress={usdContractAddress}
           bleadContractAddress={bleadContractAddress}

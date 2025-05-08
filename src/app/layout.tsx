@@ -54,7 +54,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased py-4`}
       >
         <Providers initialState={initialState}>
           <UserProfileBtn

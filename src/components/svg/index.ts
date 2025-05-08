@@ -4,6 +4,7 @@ import ClipboardLightSvgUrl from "./clipboard-light.svg?url";
 import CheckSvgUrl from "./check.svg?url";
 import CheckLightSvgUrl from "./check-light.svg?url";
 import UserSvgUrl from "./user.svg?url";
+import BleadSvgUrl from "./blead.svg?url";
 
 export {
   LogoutSvgUrl,
@@ -12,4 +13,5 @@ export {
   CheckSvgUrl,
   CheckLightSvgUrl,
   UserSvgUrl,
+  BleadSvgUrl,
 };

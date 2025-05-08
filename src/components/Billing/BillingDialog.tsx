@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { WalletInfo } from "../WalletInfo/WalletInfo";
 import { feesTokenDetailsSchema } from "@/lib/schemas/feesTokenDetailsSchema";
+import { MyDaogsPromo } from "../MyDaogsPromo/MyDaogsPromo";
 
 const ENV_CONFIG = getClientConfig();
 
@@ -122,7 +123,7 @@ export const BillingDialog = () => {
         ) : null}
         {isLoading ? <p>{"Loading data from the blockchain"}</p> : null}
         <WalletInfo />
-        <div className="w-full flex gap-8 justify-center items-center">
+        <div className="w-full flex gap-8 justify-center items-center flex-wrap md:flex-nowrap">
           <ButtonsBlock
             usdContractAddress={
               validationResult.data?.tokenAddress as `0x${string}` | undefined
@@ -196,6 +197,7 @@ export const BillingDialog = () => {
             }}
           />
         </div>
+        <MyDaogsPromo />
       </DialogContent>
     </Dialog>
   );

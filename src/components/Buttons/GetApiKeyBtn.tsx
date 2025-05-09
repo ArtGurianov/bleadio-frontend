@@ -11,7 +11,11 @@ const GetApiKeyBtnCore = ({
   disabled,
   onClick,
 }: GetApiKeyBtnProps) => {
-  return <Button children={children} disabled={disabled} onClick={onClick} />;
+  return (
+    <Button disabled={disabled} onClick={onClick}>
+      {children}
+    </Button>
+  );
 };
 
 export const GetApiKeyBtn = withAuthBtn(GetApiKeyBtnCore);

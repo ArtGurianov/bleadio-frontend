@@ -9,3 +9,5 @@ export const appDataSchema = z
     timestamp: z.optional(z.coerce.number()),
   })
   .catchall(z.string());
+
+export const ommitedKeySchema = appDataSchema.omit({ apiKey: true });

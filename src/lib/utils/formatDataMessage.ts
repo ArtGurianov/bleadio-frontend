@@ -1,7 +1,6 @@
 import { z } from "zod";
-import { appDataSchema } from "../schemas/appDataSchema";
+import { ommitedKeySchema } from "../schemas/appDataSchema";
 
-const ommitedKeySchema = appDataSchema.omit({ apiKey: true });
 export const formatDataMessage = ({
   title,
   app,

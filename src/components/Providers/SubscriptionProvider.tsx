@@ -2,13 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { subscriptionDataSchema } from "@/lib/schemas/subscriptionDataSchema";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-} from "react";
+import { createContext, ReactNode, useContext, useMemo } from "react";
 import { z } from "zod";
 import { useReadContract } from "wagmi";
 import { bleadContractAbi } from "@/config/web3/abi";

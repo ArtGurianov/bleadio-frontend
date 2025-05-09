@@ -6,16 +6,16 @@ export interface CreateActionResponseProps {
   error?: any;
 }
 
-export interface ActionResponse {
+export interface ActionResponse<T> {
   success: boolean;
-  data: NonUndefined<any>;
+  data: NonUndefined<T>;
   errorMessage: string | null;
 }
 
-export const createActionResponse = ({
+export const createActionResponse = <T>({
   data,
   error,
-}: CreateActionResponseProps): ActionResponse => {
+}: CreateActionResponseProps): ActionResponse<T> => {
   return {
     success: !error,
     data: typeof data === "undefined" ? null : data,

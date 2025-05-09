@@ -82,4 +82,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   );
 };
 
-export const ApproveTransactionBtn = withAuthBtn(ApproveTransactionBtnCore);
+const ApproveTransactionBtn = withAuthBtn(ApproveTransactionBtnCore);
+ApproveTransactionBtn.displayName = "ApproveTransactionBtn";
+
+export { ApproveTransactionBtn };

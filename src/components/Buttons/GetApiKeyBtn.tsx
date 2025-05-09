@@ -18,4 +18,7 @@ const GetApiKeyBtnCore = ({
   );
 };
 
-export const GetApiKeyBtn = withAuthBtn(GetApiKeyBtnCore);
+const GetApiKeyBtn = withAuthBtn(GetApiKeyBtnCore);
+GetApiKeyBtn.displayName = "GetApiKeyBtn";
+
+export { GetApiKeyBtn };

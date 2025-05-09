@@ -168,4 +168,7 @@ const UserProfileBtnCore = ({
   );
 };
 
-export const UserProfileBtn = withAuthBtn(UserProfileBtnCore);
+const UserProfileBtn = withAuthBtn(UserProfileBtnCore);
+UserProfileBtn.displayName = "UserProfileBtn";
+
+export { UserProfileBtn };

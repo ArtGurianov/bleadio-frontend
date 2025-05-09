@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { emailSchema } from "@/lib/schemas/emailSchema";
@@ -20,7 +20,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/app/actions/login";
 import { useRouter } from "next/navigation";
 
-export const GuardedLoginBtn = (props: GetComponentProps<typeof Button>) => {
+export const GuardedLoginBtn: FC<GetComponentProps<typeof Button>> = (
+  props
+) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof emailSchema>>({

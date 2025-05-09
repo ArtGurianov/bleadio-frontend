@@ -93,4 +93,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   );
 };
 
-export const SpendTransactionBtn = withAuthBtn(SpendTransactionBtnCore);
+const SpendTransactionBtn = withAuthBtn(SpendTransactionBtnCore);
+SpendTransactionBtn.displayName = "SpendTransactionBtn";
+
+export { SpendTransactionBtn };

@@ -10,7 +10,7 @@ export const InstructionsTelegramBot = () => {
       <p className="text-center border-2 border-muted-foreground/80 bg-accent/80 py-1 px-2 rounded-md">
         {"Start the "}
         <Button>
-          <Link href="https://t.me/PingLeadBot">{"@PingLeadBot"}</Link>
+          <Link href="https://t.me/bleadio_bot">{"@bleadio_bot"}</Link>
         </Button>
         {" and run "}
         <span className="font-semibold text-primary">

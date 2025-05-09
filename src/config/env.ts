@@ -69,7 +69,6 @@ export const getClientConfig = () => {
         `${temp} ${next.path.toString().toUpperCase()} - ${next.message};`,
       ""
     );
-    console.log("CLIENT ERROR");
     throw new Error(`Env vars validation failed: ${errorStr}`);
   }
   return validationResult.data;

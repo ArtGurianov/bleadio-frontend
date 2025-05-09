@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { NonUndefined } from "../types";
 import { formatErrorMessage } from "./formatErrorMessage";
 
@@ -6,16 +8,16 @@ export interface CreateActionResponseProps {
   error?: any;
 }
 
-export interface ActionResponse<T> {
+export interface ActionResponse {
   success: boolean;
-  data: NonUndefined<T>;
+  data: NonUndefined<any>;
   errorMessage: string | null;
 }
 
-export const createActionResponse = <T>({
+export const createActionResponse = ({
   data,
   error,
-}: CreateActionResponseProps): ActionResponse<T> => {
+}: CreateActionResponseProps): ActionResponse => {
   return {
     success: !error,
     data: typeof data === "undefined" ? null : data,

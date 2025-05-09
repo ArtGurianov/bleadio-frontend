@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { AppClientError } from "./appClientError";
 
 export const formatErrorMessage = (error?: any) => {

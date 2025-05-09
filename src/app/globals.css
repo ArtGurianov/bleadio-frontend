@@ -30,19 +30,19 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #3c8c86;
+  --background: hsl(176, 40%, 39%);
   --foreground: hsl(216, 96%, 10%);
   --card: hsl(214, 7%, 17%);
   --card-foreground: hsl(216, 96%, 10%);
-  --popover: #d3ffe4;
+  --popover: hsl(143, 100%, 91%);
   --popover-foreground: hsl(216, 96%, 10%);
-  --primary: #3a0f34;
+  --primary: hsl(308, 59%, 14%);
   --primary-foreground: hsl(176 40% 98%);
   --secondary: hsl(206 40% 80%);
   --secondary-foreground: hsl(216, 96%, 10%);
   --muted: hsl(340, 29%, 28%);
   --muted-foreground: hsl(216, 96%, 10%);
-  --accent: #d3ffe4;
+  --accent: hsl(143, 100%, 91%);
   --accent-foreground: hsl(93, 100%, 50%);
   --destructive: hsl(0 100% 50%);
   --destructive-foreground: hsl(0 100% 98%);

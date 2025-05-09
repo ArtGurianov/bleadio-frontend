@@ -13,6 +13,7 @@ import Image from "next/image";
 import getConfig from "next/config";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { Footer } from "@/components/Footer/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,7 +55,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased p-4 flex justify-center items-center`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center items-center`}
       >
         <Providers initialState={initialState}>
           <UserProfileBtn
@@ -73,9 +74,10 @@ export default async function RootLayout({
             />
           </UserProfileBtn>
           <BillingDialog />
-          <div className="flex flex-col justify-center items-center max-w-[720px]">
+          <div className="p-4 flex flex-col justify-center items-center max-w-[720px]">
             {children}
           </div>
+          <Footer />
           <UpgradeBanner />
           <QueryInterceptor config={INTERCEPT_QUERIES_CONFIG} />
         </Providers>

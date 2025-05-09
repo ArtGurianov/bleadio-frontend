@@ -15,7 +15,7 @@ export const Hero = () => {
           priority
         />
       </div>
-      <div className="font-mono text-2xl px-24 md:px-0">
+      <div className="font-mono text-2xl">
         <p className="text-primary md:text-end font-semibold">
           {"Got your lead?"}
         </p>

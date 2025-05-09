@@ -59,7 +59,7 @@ export default async function RootLayout({
       >
         <Providers initialState={initialState}>
           <UserProfileBtn
-            className="absolute top-4 right-8 lg:opacity-60 lg:hover:opacity-100"
+            className="absolute top-4 right-2 md:right-8 lg:opacity-60 lg:hover:opacity-100"
             variant="unset"
             size="unset"
           >

@@ -1,4 +1,4 @@
-import { AppClientError } from "./AppClientError";
+import { AppClientError } from "./appClientError";
 
 export const formatErrorMessage = (error?: any) => {
   const isClientError = error instanceof AppClientError;

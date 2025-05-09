@@ -64,16 +64,14 @@ const DrawerWrapper = ({
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent className={cn("px-2 py-2", className)}>
         <DrawerHeader>
-          <DrawerTitle className="text-center font-serif text-4xl text-muted-foreground">
+          <DrawerTitle className="text-center font-serif font-medium text-4xl text-muted-foreground">
             {title}
           </DrawerTitle>
           <DrawerDescription className="sr-only">
             {`Drawer content for ${title}`}
           </DrawerDescription>
         </DrawerHeader>
-        <div className="py-4 px-3 bg-primary/20 border border-primary">
-          {content}
-        </div>
+        <div className="py-4 px-3">{content}</div>
       </DrawerContent>
     </Drawer>
   );

@@ -1,5 +1,5 @@
 export { cn } from "./cn";
-export { AppClientError } from "./AppClientError";
+export { AppClientError } from "./appClientError";
 export { createActionResponse } from "./createActionResponse";
 export { formatDataMessage } from "./formatDataMessage";
 export { getAppChain } from "./getAppChain";

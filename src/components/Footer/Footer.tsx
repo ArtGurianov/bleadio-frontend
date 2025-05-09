@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <div className="w-full px-4 py-1 bg-foreground/80 flex flex-col md:flex-row gap-2 justify-center items-center text-accent/80 text-center text-wrap">
+    <div className="w-full px-4 py-1 bg-foreground/80 flex flex-col md:flex-row gap-2 justify-center items-center text-accent/80 text-center text-wrap font-mono text-sm">
       <span>
         {"Contact us: "}
         <Link

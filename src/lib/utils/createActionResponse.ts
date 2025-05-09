@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { NonUndefined } from "../types";
 import { formatErrorMessage } from "./formatErrorMessage";
 

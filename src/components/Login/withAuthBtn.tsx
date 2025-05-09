@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 export const withAuthBtn = <T extends GetComponentProps<typeof Button>>(
   component: FC<T>
 ): FC<T> => {
-  const Comp = (props: T) => {
+  const WithAuthBtn = (props: T) => {
     const { data, status } = useSession();
     const Cmp = component;
     Cmp.displayName = "Button";
@@ -26,7 +26,7 @@ export const withAuthBtn = <T extends GetComponentProps<typeof Button>>(
       </GuardedLoginBtn>
     );
   };
-  Comp.displayName = "WithAuthBtn";
+  WithAuthBtn.displayName = "WithAuthBtn";
 
-  return Comp;
+  return WithAuthBtn;
 };

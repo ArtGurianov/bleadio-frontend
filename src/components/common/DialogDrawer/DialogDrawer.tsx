@@ -40,14 +40,14 @@ const DialogWrapper = ({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className={cn("py-8 px-4", className)}>
         <DialogHeader>
-          <DialogTitle className="text-center font-serif text-4xl my-4 text-muted-foreground">
+          <DialogTitle className="text-center font-medium font-serif text-3xl my-4 text-muted-foreground">
             {title}
           </DialogTitle>
           <DialogDescription className="sr-only">
             {`Dialog content for ${title}`}
           </DialogDescription>
         </DialogHeader>
-        <div className="py-4 px-3 bg-primary/20 border border-primary">
+        <div className="py-4 px-3 bg-primary/20 border border-primary rounded-md">
           {content}
         </div>
       </DialogContent>
@@ -67,14 +67,14 @@ const DrawerWrapper = ({
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent className={cn("px-2 py-2", className)}>
         <DrawerHeader>
-          <DrawerTitle className="text-center font-serif text-4xl text-muted-foreground">
+          <DrawerTitle className="text-center font-medium font-serif text-3xl text-muted-foreground">
             {title}
           </DrawerTitle>
           <DrawerDescription className="sr-only">
             {`Drawer content for ${title}`}
           </DrawerDescription>
         </DrawerHeader>
-        <div className="py-4 px-3 bg-primary/20 border border-primary">
+        <div className="py-4 px-3 bg-primary/20 border border-primary rounded-md">
           {content}
         </div>
       </DrawerContent>

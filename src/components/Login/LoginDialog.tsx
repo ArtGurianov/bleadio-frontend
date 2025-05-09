@@ -8,6 +8,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -50,13 +51,14 @@ export const GuardedLoginBtn = (props: GetComponentProps<typeof Button>) => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="flex flex-col sm:flex-row gap-4 self-stretch justify-center items-center mt-4"
+            className="flex flex-col sm:flex-row gap-4 self-stretch justify-center items-center"
           >
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem className="grow self-stretch">
+                  <FormLabel htmlFor={field.name}>{"Email"}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -73,7 +75,7 @@ export const GuardedLoginBtn = (props: GetComponentProps<typeof Button>) => {
                 </FormItem>
               )}
             />
-            <div className="flex self-stretch justify-center">
+            <div className="flex self-end justify-end">
               {formStatus === "SUCCESS" ? (
                 <span className="text-2xl text-center text-primary">
                   {"Email sent!"}

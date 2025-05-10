@@ -2,15 +2,15 @@ import { withAuthBtn } from "@/components/Login/withAuthBtn";
 import { Button } from "@/components/ui/button";
 import { GetComponentProps } from "@/lib/types";
 
-interface GetApiKeyBtnProps extends GetComponentProps<typeof Button> {
+interface ResetApiKeyBtnProps extends GetComponentProps<typeof Button> {
   userEmail: string | null;
 }
 
-const GetApiKeyBtnCore = ({
+const ResetApiKeyBtnCore = ({
   children,
   disabled,
   onClick,
-}: GetApiKeyBtnProps) => {
+}: ResetApiKeyBtnProps) => {
   return (
     <Button disabled={disabled} onClick={onClick}>
       {children}
@@ -18,7 +18,7 @@ const GetApiKeyBtnCore = ({
   );
 };
 
-const GetApiKeyBtn = withAuthBtn(GetApiKeyBtnCore);
-GetApiKeyBtn.displayName = "GetApiKeyBtn";
+const ResetApiKeyBtn = withAuthBtn(ResetApiKeyBtnCore);
+ResetApiKeyBtn.displayName = "ResetApiKeyBtn";
 
-export { GetApiKeyBtn };
+export { ResetApiKeyBtn };

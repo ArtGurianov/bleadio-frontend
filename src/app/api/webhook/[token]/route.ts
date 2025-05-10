@@ -73,16 +73,28 @@ export async function POST(
       }
 
       try {
-        await db.user.update({
+        const alreadySet = await db.user.findFirst({
           where: { tgUserId: userId },
-          data: { tgUserId: null },
         });
+        if (alreadySet) {
+          await db.user.update({
+            where: { id: alreadySet.id },
+            data: { tgUserId: null },
+          });
+        }
       } catch {}
 
-      await db.user.update({
+      const updateUser = await db.user.findFirst({
         where: { apiKey: parsed[1] },
+      });
+      if (!updateUser) {
+        throw new AppClientError("ApiKey not found");
+      }
+      await db.user.update({
+        where: { id: updateUser.id },
         data: { tgUserId: userId },
       });
+
       throw new AppClientError(
         "Success! You can now start sending notifications from your services."
       );

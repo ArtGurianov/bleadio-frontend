@@ -1,7 +1,7 @@
 "use client";
 
-import { getApiKey } from "@/app/actions/getApiKey";
-import { GetApiKeyBtn } from "@/components/Buttons/GetApiKeyBtn";
+import { resetApiKey } from "@/app/actions/resetApiKey";
+import { ResetApiKeyBtn } from "@/components/Buttons/ResetApiKeyBtn";
 import { FormStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -11,14 +11,17 @@ import { useSession } from "next-auth/react";
 const API_KEY_MASK = "••••••••-••••-••••-••••-••••••••••••";
 
 export const ApiKeyControls = () => {
-  const { data: sessionData, update: updateSession } = useSession();
+  const {
+    data: sessionData,
+    update: updateSession,
+    status: sessionStatus,
+  } = useSession();
 
   const [status, setStatus] = useState<FormStatus>("PENDING");
 
-  const handleGetApiKey = () => {
-    const isReset = !!sessionData?.user?.apiKey;
+  const handleResetApiKey = () => {
     setStatus("LOADING");
-    getApiKey(isReset)
+    resetApiKey(sessionData!.user.id!)
       .then((res) => {
         updateSession({ apiKey: res.data }).finally(() => {
           setStatus(res.success ? "SUCCESS" : "ERROR");
@@ -30,7 +33,7 @@ export const ApiKeyControls = () => {
   };
 
   let displayValue = sessionData?.user?.apiKey || API_KEY_MASK;
-  if (status === "LOADING") {
+  if (status === "LOADING" || sessionStatus === "loading") {
     displayValue = "loading...";
   }
   if (status === "ERROR") {
@@ -50,15 +53,15 @@ export const ApiKeyControls = () => {
           className="w-6 self-stretch"
         />
       ) : null}
-      <GetApiKeyBtn
+      <ResetApiKeyBtn
         disabled={status === "LOADING"}
         userEmail={sessionData?.user?.email || null}
         onClick={() => {
-          handleGetApiKey();
+          handleResetApiKey();
         }}
       >
         {sessionData?.user?.apiKey ? "Reset" : "Get"}
-      </GetApiKeyBtn>
+      </ResetApiKeyBtn>
     </div>
   );
 };

@@ -64,7 +64,7 @@ export async function POST(request: Request) {
     const isResetBillingPeriod =
       billingPeriodStartTimestamp !== user.billingPeriodStart.getTime();
     await db.user.update({
-      where: { apiKey },
+      where: { id: user.id },
       data: {
         billingPeriodMessagesSent: isResetBillingPeriod
           ? 1

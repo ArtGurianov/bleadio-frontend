@@ -14,6 +14,7 @@ import getConfig from "next/config";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/Footer/Footer";
+import { LoginDialog } from "@/components/Login/LoginDialog";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,7 +57,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center items-center`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center items-center min-h-screen`}
       >
         <Providers initialState={initialState}>
           <UserProfileBtn
@@ -79,6 +80,7 @@ export default async function RootLayout({
             {children}
           </div>
           <Footer />
+          <LoginDialog />
           <UpgradeBanner />
           <QueryInterceptor config={INTERCEPT_QUERIES_CONFIG} />
         </Providers>

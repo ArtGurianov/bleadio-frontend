@@ -7,7 +7,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -17,27 +16,25 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 
 export interface DialogDrawerProps {
   className?: string;
   children: ReactNode;
-  content: ReactNode;
   title: string;
+  isOpen: boolean;
   onClose?: () => void;
 }
 
 const DialogWrapper = ({
+  isOpen,
   className,
   children,
-  content,
   title,
   onClose,
 }: DialogDrawerProps) => {
   return (
-    <Dialog onOpenChange={onClose}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className={cn("py-8 px-4", className)}>
         <DialogHeader>
           <DialogTitle className="text-center font-medium font-serif text-3xl my-4 text-muted-foreground">
@@ -48,7 +45,7 @@ const DialogWrapper = ({
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 px-3 bg-primary/20 border border-primary rounded-md">
-          {content}
+          {children}
         </div>
       </DialogContent>
     </Dialog>
@@ -58,13 +55,12 @@ const DialogWrapper = ({
 const DrawerWrapper = ({
   className,
   children,
-  content,
   title,
+  isOpen,
   onClose,
 }: DialogDrawerProps) => {
   return (
-    <Drawer onClose={onClose}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+    <Drawer open={isOpen} onClose={onClose}>
       <DrawerContent className={cn("px-2 py-2", className)}>
         <DrawerHeader>
           <DrawerTitle className="text-center font-medium font-serif text-3xl text-muted-foreground">
@@ -75,7 +71,7 @@ const DrawerWrapper = ({
           </DrawerDescription>
         </DrawerHeader>
         <div className="py-4 px-3 bg-primary/20 border border-primary rounded-md">
-          {content}
+          {children}
         </div>
       </DrawerContent>
     </Drawer>

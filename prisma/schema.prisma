@@ -22,8 +22,8 @@ model User {
   email                         String?         @unique
   emailVerified                 DateTime?
   image                         String?
-  apiKey                        String?         @unique
-  tgUserId                      Int?            @unique
+  apiKey                        String?
+  tgUserId                      Int?
   billingPeriodStart            DateTime        @default(now())
   billingPeriodMessagesSent     Int             @default(0)
   accounts                      Account[]

@@ -71,6 +71,14 @@ export async function POST(
           "Invalid format. Please send as `/set_api_key YOUR_KEY`"
         );
       }
+
+      try {
+        await db.user.update({
+          where: { tgUserId: userId },
+          data: { tgUserId: null },
+        });
+      } catch {}
+
       await db.user.update({
         where: { apiKey: parsed[1] },
         data: { tgUserId: userId },
@@ -81,7 +89,6 @@ export async function POST(
     }
     throw new AppClientError("Command not recognized.");
   } catch (error) {
-    console.error(error);
     try {
       const qs = new URLSearchParams({
         text: formatErrorMessage(error),

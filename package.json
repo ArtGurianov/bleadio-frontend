@@ -1,5 +1,5 @@
 {
-  "name": "breadio-frontend",
+  "name": "bleadio-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate",
     "db:flush": "prisma db push --force-reset",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && tsx scripts/webhookRegister.ts",
     "webhook:register": "tsx scripts/webhookRegister.ts"
   },
   "dependencies": {

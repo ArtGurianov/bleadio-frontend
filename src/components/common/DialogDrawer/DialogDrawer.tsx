@@ -60,7 +60,7 @@ const DrawerWrapper = ({
   onClose,
 }: DialogDrawerProps) => {
   return (
-    <Drawer open={isOpen} onClose={onClose}>
+    <Drawer open={isOpen} onClose={onClose} autoFocus={isOpen}>
       <DrawerContent className={cn("px-2 py-2", className)}>
         <DrawerHeader>
           <DrawerTitle className="text-center font-medium font-serif text-3xl text-muted-foreground">

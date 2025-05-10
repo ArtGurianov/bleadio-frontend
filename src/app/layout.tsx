@@ -57,7 +57,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center items-center min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-start items-center bg-background bg-[url(/bg-image.png)] bg-repeat text-foreground min-h-screen`}
       >
         <Providers initialState={initialState}>
           <UserProfileBtn
@@ -76,7 +76,7 @@ export default async function RootLayout({
             />
           </UserProfileBtn>
           <BillingDialog />
-          <div className="p-4 flex flex-col justify-center items-center max-w-[720px]">
+          <div className="p-4 flex flex-col justify-center items-center max-w-[720px] min-h-[calc(100vh-2rem)]">
             {children}
           </div>
           <Footer />

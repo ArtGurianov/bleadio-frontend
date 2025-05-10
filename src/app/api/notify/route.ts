@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
     const { apiKey, ...rest } = verificationResult.data;
 
-    const user = await db.user.findUnique({ where: { apiKey } });
+    const user = await db.user.findFirst({ where: { apiKey } });
     if (!user) {
       throw new AppClientError("Api key not found");
     }

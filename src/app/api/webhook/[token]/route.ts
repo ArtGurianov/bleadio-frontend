@@ -81,6 +81,7 @@ export async function POST(
     }
     throw new AppClientError("Command not recognized.");
   } catch (error) {
+    console.error(error);
     try {
       const qs = new URLSearchParams({
         text: formatErrorMessage(error),

@@ -61,7 +61,7 @@ export const LoginDialog: FC = () => {
       isOpen={isOpen}
       onClose={() => {
         setIsOpen(false);
-        router.push("/");
+        router.push("/", { scroll: false });
       }}
     >
       <Form {...form}>

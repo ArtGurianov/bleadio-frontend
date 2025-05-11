@@ -1,12 +1,13 @@
-import { cookieStorage, createConfig, createStorage, injected } from "wagmi";
+import { cookieStorage, createConfig, createStorage } from "wagmi";
 import { createViemClient } from "./viemClient";
 import { getAppChain } from "@/lib/utils";
+import { metaMask } from "wagmi/connectors";
 
 const chain = getAppChain();
 
 export const wagmiConfig = createConfig({
   chains: [chain],
-  connectors: [injected()],
+  connectors: [metaMask()],
   storage: createStorage({ storage: cookieStorage }),
   ssr: true,
   client: () => createViemClient(chain),

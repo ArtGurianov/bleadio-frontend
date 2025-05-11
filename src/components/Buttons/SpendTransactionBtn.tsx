@@ -13,6 +13,8 @@ import { withAuthBtn } from "@/components/Login/withAuthBtn";
 import { GetComponentProps } from "@/lib/types";
 import { useSubscription } from "@/components/Providers/SubscriptionProvider";
 import { useSession } from "next-auth/react";
+import { sendEmail } from "@/app/actions/sendEmail";
+import { EMAIL_MESSAGE_TYPES } from "@/lib/utils/contsants";
 
 interface SpendTransactionBtnProps extends GetComponentProps<typeof Button> {
   currentAllowanceUsd?: number;
@@ -49,6 +51,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
     if (isSuccess) {
       refetch();
       onSuccess();
+      sendEmail(data!.user.email!, EMAIL_MESSAGE_TYPES.SUBSCRIPTION_UPGRADED);
     }
   }, [isSuccess]);
 

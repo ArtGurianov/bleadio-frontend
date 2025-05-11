@@ -108,7 +108,7 @@ export const BillingDialog = () => {
     isErrorAllowance;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen} modal={false}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-mono">

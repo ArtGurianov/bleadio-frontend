@@ -2,18 +2,31 @@
 
 import { useState } from "react";
 import { ConnectWalletBtn } from "../Buttons/ConnectWalletBtn";
-import { WalletInfoDeepLink } from "./WalletInfoDeepLink";
+import Link from "next/link";
 
 export const WalletInfoNotConnected = () => {
-  const [deeplink, setDeeplink] = useState<string | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
 
   return (
     <div className="flex flex-wrap gap-4 justify-center items-center">
       <span className="font-mono text-lg text-primary">
         {"Wallet not connected"}
       </span>
-      <ConnectWalletBtn onSetDeeplink={setDeeplink} />
-      <WalletInfoDeepLink url={deeplink} />
+      <ConnectWalletBtn
+        isConnecting={isConnecting}
+        onChangeIsConnecting={() => setIsConnecting(true)}
+      />
+      <div className="px-4 py-px bg-primary/10 border-l-3 border-b-2 border-primary/80 font-light font-serif w-full text-center text-primary">
+        {"Don't have Metamask yet? "}
+        <Link
+          className="underline font-medium text-lg font-serif"
+          href={`https://www.metamask.io/download`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {"GET STARTED"}
+        </Link>
+      </div>
     </div>
   );
 };

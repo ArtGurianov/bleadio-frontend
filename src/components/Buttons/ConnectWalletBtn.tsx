@@ -1,23 +1,31 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FC, useRef } from "react";
 import { useAccount, useConnect } from "wagmi";
 
-export const ConnectWalletBtn = ({
-  onSetDeeplink,
-}: {
-  onSetDeeplink: (_: string) => void;
+interface ConnectWalletBtnProps {
+  isConnecting: boolean;
+  onChangeIsConnecting: () => void;
+}
+
+export const ConnectWalletBtn: FC<ConnectWalletBtnProps> = ({
+  isConnecting,
+  onChangeIsConnecting,
 }) => {
+  const router = useRouter();
   const { isConnected } = useAccount();
   const { connect, connectors } = useConnect();
-  const [disabled, setDisabled] = useState(false);
+  const lockedRef = useRef(false);
 
   connectors[0].getProvider().then((provider) => {
     // @ts-expect-error: wagmi ships provider with unknown type
     provider.on("display_uri", (deeplink: string) => {
-      onSetDeeplink(deeplink);
-      setDisabled(true);
+      if (lockedRef.current) return;
+      lockedRef.current = true;
+      onChangeIsConnecting();
+      router.push(deeplink);
     });
   });
 
@@ -28,8 +36,8 @@ export const ConnectWalletBtn = ({
   if (isConnected) return null;
 
   return (
-    <Button disabled={disabled} onClick={handleClick}>
-      {"Connect MetaMask"}
+    <Button disabled={isConnecting} onClick={handleClick}>
+      {isConnecting ? "Connecting..." : "Connect MetaMask"}
     </Button>
   );
 };

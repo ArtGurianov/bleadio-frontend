@@ -15,7 +15,7 @@ export const ConnectWalletBtn = () => {
 
   if (connectorIndex !== -1) {
     connectors[connectorIndex].getProvider().then((provider) => {
-      // @ts-expect-error
+      // @ts-expect-error: wagmi ships provider with unknown type
       provider.on("display_uri", (uri: string) => router.push(uri));
     });
   }

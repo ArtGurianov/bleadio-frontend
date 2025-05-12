@@ -42,7 +42,9 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   const { writeContract, data: hash, isError: isTxError } = useWriteContract();
 
   useEffect(() => {
-    toast("Transaction is sent!");
+    if (hash) {
+      toast("Transaction is sent!");
+    }
   }, [hash]);
 
   const { refetch } = useSubscription();

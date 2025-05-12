@@ -7,6 +7,7 @@ import { FC, useEffect } from "react";
 import { parseUnits } from "viem";
 import { useTransactionReceipt, useWriteContract } from "wagmi";
 import { withAuthBtn } from "../Login/withAuthBtn";
+import { toast } from "sonner";
 
 interface ApproveTransactionBtnProps extends GetComponentProps<typeof Button> {
   currentAllowanceUsd?: number;
@@ -31,6 +32,10 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   children,
 }) => {
   const { writeContract, data: hash, isError: isTxError } = useWriteContract();
+
+  useEffect(() => {
+    toast("Transaction is sent!");
+  }, [hash]);
 
   const {
     isFetching,
@@ -77,7 +82,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
       }
       onClick={() => sendTransaction()}
     >
-      {!isFetching ? children : "..."}
+      {!isFetching ? children : "waiting..."}
     </Button>
   );
 };

@@ -15,6 +15,7 @@ import { useSubscription } from "@/components/Providers/SubscriptionProvider";
 import { useSession } from "next-auth/react";
 import { sendEmail } from "@/app/actions/sendEmail";
 import { EMAIL_MESSAGE_TYPES } from "@/lib/utils/contsants";
+import { toast } from "sonner";
 
 interface SpendTransactionBtnProps extends GetComponentProps<typeof Button> {
   currentAllowanceUsd?: number;
@@ -39,6 +40,11 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   const { data } = useSession();
 
   const { writeContract, data: hash, isError: isTxError } = useWriteContract();
+
+  useEffect(() => {
+    toast("Transaction is sent!");
+  }, [hash]);
+
   const { refetch } = useSubscription();
 
   const {
@@ -91,7 +97,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
         sendTransaction();
       }}
     >
-      {!isFetching ? children : "..."}
+      {!isFetching ? children : "waiting..."}
     </Button>
   );
 };

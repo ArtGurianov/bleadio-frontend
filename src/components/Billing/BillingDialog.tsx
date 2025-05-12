@@ -13,27 +13,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
 import { WalletInfo } from "../WalletInfo/WalletInfo";
 import { feesTokenDetailsSchema } from "@/lib/schemas/feesTokenDetailsSchema";
 import { MyDaogsPromo } from "../MyDaogsPromo/MyDaogsPromo";
+import { useRouter } from "next/navigation";
 
 const ENV_CONFIG = getClientConfig();
 
 export const BillingDialog = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const { address } = useAccount();
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-
-  useEffect(() => {
-    document.addEventListener("open-billing-dialog", handleOpen);
-    return () => {
-      document.removeEventListener("open-billing-dialog", handleOpen);
-    };
-  }, []);
-
   const {
     data: feesContractDetails,
     isPending: isPendingFeesContractDetails,
@@ -108,7 +97,12 @@ export const BillingDialog = () => {
     isErrorAllowance;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={true}
+      onOpenChange={() => {
+        router.push("/");
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-mono">

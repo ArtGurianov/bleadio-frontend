@@ -4,7 +4,6 @@ import { InterceptQueryData } from "@/lib/types";
 import { Providers } from "@/components/Providers/Providers";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
-import { BillingDialog } from "@/components/Billing/BillingDialog";
 import { QueryInterceptor } from "@/components/common/DialogDrawer/QueryInterceptor";
 import { UserProfileBtn } from "@/components/Buttons/UserProfileBtn";
 import { UserSvgUrl } from "@/components/svg";
@@ -75,7 +74,6 @@ export default async function RootLayout({
               priority
             />
           </UserProfileBtn>
-          <BillingDialog />
           <div className="p-4 flex flex-col justify-center items-center max-w-[720px] min-h-[calc(100vh-2rem)]">
             {children}
           </div>

@@ -1,46 +1,35 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useDeepLink } from "@/lib/hooks/useDeepLink";
 import { useState } from "react";
 import { useAccount, useConnect } from "wagmi";
-import Link from "next/link";
 
-const FALLBACK_URL = "https://metamask.io/download";
-
-export const ConnectWalletBtn = () => {
+export const ConnectWalletBtn = ({
+  onSetDeeplink,
+}: {
+  onSetDeeplink: (_: string) => void;
+}) => {
   const { isConnected } = useAccount();
   const { connect, connectors } = useConnect();
-  const connectorIndex = connectors.findIndex(
-    (connector) => connector.name === "MetaMask"
-  );
-  const [deeplink, setDeeplink] = useState<string | null>(null);
-  useDeepLink(deeplink, FALLBACK_URL);
+  const [disabled, setDisabled] = useState(false);
 
-  if (connectorIndex !== -1) {
-    connectors[connectorIndex].getProvider().then((provider) => {
-      // @ts-expect-error: wagmi ships provider with unknown type
-      provider.on("display_uri", (deeplink: string) => {
-        setDeeplink(deeplink);
-      });
+  connectors[0].getProvider().then((provider) => {
+    // @ts-expect-error: wagmi ships provider with unknown type
+    provider.on("display_uri", (deeplink: string) => {
+      onSetDeeplink(deeplink);
+      setDisabled(true);
     });
-  }
+  });
 
   const handleClick = () => {
-    if (connectorIndex !== -1) {
-      connect({ connector: connectors[connectorIndex] });
-    }
+    connect({ connector: connectors[0] });
   };
 
   if (isConnected) return null;
 
   return (
-    <Button onClick={handleClick}>
-      {connectorIndex === -1 ? (
-        <Link href="https://metamask.io/download">{"Get MetaMask"}</Link>
-      ) : (
-        `Connect MetaMask`
-      )}
+    <Button disabled={disabled} onClick={handleClick}>
+      {"Connect MetaMask"}
     </Button>
   );
 };

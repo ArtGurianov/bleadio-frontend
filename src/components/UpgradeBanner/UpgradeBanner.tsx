@@ -5,12 +5,13 @@ import { cn } from "@/lib/utils";
 import { BILLING_PLANS } from "@/lib/utils/contsants";
 import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { XIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const UpgradeBanner = () => {
+  const router = useRouter();
   const [isManualOpen, setIsManualOpen] = useState(true);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { data } = useSubscription();
 
   const isVisible =
@@ -48,15 +49,7 @@ export const UpgradeBanner = () => {
       </p>
       <p className="flex gap-2 justify-center items-center text-accent">
         {"Need more?"}
-        <Button
-          ref={buttonRef}
-          onClick={() => {
-            const event = new CustomEvent("open-billing-dialog", {
-              bubbles: true,
-            });
-            buttonRef.current?.dispatchEvent(event);
-          }}
-        >
+        <Button onClick={() => router.push("/billing")}>
           {"Upgrade to PRO"}
         </Button>
       </p>

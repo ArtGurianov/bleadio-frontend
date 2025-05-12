@@ -10,7 +10,8 @@ import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
 import { getClientConfig } from "@/config/env";
 import { cn } from "@/lib/utils";
 import { GetComponentProps } from "@/lib/types";
-import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const DISPLAY_USER_KEYS = {
   EMAIL: "EMAIL",
@@ -34,7 +35,7 @@ const UserProfileBtnCore = ({
   variant,
   size,
 }: GetComponentProps<typeof Button>) => {
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const router = useRouter();
 
   const {
     data: subscriptionData,
@@ -135,17 +136,12 @@ const UserProfileBtnCore = ({
                     <span className="flex gap-1">
                       {displayData[each].value}
                       <Button
-                        ref={buttonRef}
                         className="px-2 font-serif rounded-l-none rounded-r-full"
                         size="unset"
-                        onClick={() => {
-                          const event = new CustomEvent("open-billing-dialog", {
-                            bubbles: true,
-                          });
-                          buttonRef.current?.dispatchEvent(event);
-                        }}
                       >
-                        {displayBillingPlan === "PRO" ? "EXTEND" : "UPGRADE"}
+                        <Link href="/billing">
+                          {displayBillingPlan === "PRO" ? "EXTEND" : "UPGRADE"}
+                        </Link>
                       </Button>
                     </span>
                   ) : (

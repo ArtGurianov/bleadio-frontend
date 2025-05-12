@@ -8,9 +8,10 @@ export const useDeepLink = (url: string | null, fallbackUrl: string) => {
 
   useEffect(() => {
     if (!url) return;
+
     const timeoutId = setTimeout(() => {
       router.push(fallbackUrl);
-    }, 500);
+    }, 1000);
 
     const handleVisibilityChange = () => {
       if (document.hidden) {

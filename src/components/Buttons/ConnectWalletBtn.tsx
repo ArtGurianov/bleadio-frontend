@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { useDeepLink } from "@/lib/hooks/useDeepLink";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAccount, useConnect } from "wagmi";
+import Link from "next/link";
 
 const FALLBACK_URL = "https://metamask.io/download";
 

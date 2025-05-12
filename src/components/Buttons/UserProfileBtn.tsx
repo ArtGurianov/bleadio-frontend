@@ -35,8 +35,6 @@ const UserProfileBtnCore = ({
   variant,
   size,
 }: GetComponentProps<typeof Button>) => {
-  const router = useRouter();
-
   const {
     data: subscriptionData,
     isPending,

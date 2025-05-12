@@ -7,7 +7,11 @@ const chain = getAppChain();
 
 export const wagmiConfig = createConfig({
   chains: [chain],
-  connectors: [metaMask()],
+  connectors: [
+    metaMask({
+      headless: true,
+    }),
+  ],
   storage: createStorage({ storage: cookieStorage }),
   ssr: true,
   client: () => createViemClient(chain),

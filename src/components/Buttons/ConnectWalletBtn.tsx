@@ -2,14 +2,23 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAccount, useConnect } from "wagmi";
 
 export const ConnectWalletBtn = () => {
+  const router = useRouter();
   const { isConnected } = useAccount();
   const { connect, connectors } = useConnect();
   const connectorIndex = connectors.findIndex(
     (connector) => connector.name === "MetaMask"
   );
+
+  if (connectorIndex !== -1) {
+    connectors[connectorIndex].getProvider().then((provider) => {
+      // @ts-expect-error
+      provider.on("display_uri", (uri: string) => router.push(uri));
+    });
+  }
 
   const handleClick = () => {
     if (connectorIndex !== -1) {

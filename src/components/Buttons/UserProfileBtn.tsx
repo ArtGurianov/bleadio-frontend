@@ -10,7 +10,6 @@ import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
 import { getClientConfig } from "@/config/env";
 import { cn } from "@/lib/utils";
 import { GetComponentProps } from "@/lib/types";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const DISPLAY_USER_KEYS = {

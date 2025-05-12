@@ -10,7 +10,7 @@ export const useDeepLink = (url: string | null, fallbackUrl: string) => {
     if (!url) return;
     const timeoutId = setTimeout(() => {
       router.push(fallbackUrl);
-    }, 1000);
+    }, 500);
 
     const handleVisibilityChange = () => {
       if (document.hidden) {

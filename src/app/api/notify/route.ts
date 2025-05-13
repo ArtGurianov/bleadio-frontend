@@ -58,13 +58,13 @@ export async function POST(request: Request) {
       user.billingPeriodMessagesSent >= messagesLimitNumber
     ) {
       if (!user.limitReachedEmailSent) {
-        sendEmail(
+        await sendEmail(
           user.email!,
           billingPlan === "LIGHT"
             ? EMAIL_MESSAGE_TYPES.LIMIT_REACHED_LITE
             : EMAIL_MESSAGE_TYPES.LIMIT_REACHED_PRO
         );
-        db.user.update({
+        await db.user.update({
           where: { id: user.id },
           data: { limitReachedEmailSent: true },
         });
@@ -78,14 +78,14 @@ export async function POST(request: Request) {
     const isResetBillingPeriod =
       billingPeriodStartTimestamp !== user.billingPeriodStart.getTime();
     if (isResetBillingPeriod) {
-      sendEmail(
+      await sendEmail(
         user.email!,
         billingPlan === "LIGHT"
           ? EMAIL_MESSAGE_TYPES.SUBSCRIPTION_RESET_LITE
           : EMAIL_MESSAGE_TYPES.SUBSCRIPTION_RESET_PRO
       );
     }
-    db.user.update({
+    await db.user.update({
       where: { id: user.id },
       data: {
         billingPeriodMessagesSent: isResetBillingPeriod

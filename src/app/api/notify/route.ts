@@ -94,6 +94,7 @@ export async function POST(request: Request) {
         billingPeriodStart: isResetBillingPeriod
           ? new Date(billingPeriodStartTimestamp)
           : user.billingPeriodStart,
+        limitReachedEmailSent: false,
       },
     });
 

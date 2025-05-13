@@ -9,6 +9,8 @@ import { subscriptionDataSchema } from "@/lib/schemas/subscriptionDataSchema";
 import { calculateBillingPeriodStartTimestamp } from "@/lib/utils/calculateBillingPeriod";
 import { z } from "zod";
 import { getServerConfig } from "@/config/env";
+import { sendEmail } from "@/app/actions/sendEmail";
+import { EMAIL_MESSAGE_TYPES } from "@/lib/utils/contsants";
 
 const ENV_CONFIG = getServerConfig();
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${ENV_CONFIG.TG_BOT_TOKEN}`;
@@ -55,6 +57,18 @@ export async function POST(request: Request) {
       user.billingPeriodStart.getTime() === billingPeriodStartTimestamp &&
       user.billingPeriodMessagesSent >= messagesLimitNumber
     ) {
+      if (!user.limitReachedEmailSent) {
+        sendEmail(
+          user.email!,
+          billingPlan === "LIGHT"
+            ? EMAIL_MESSAGE_TYPES.LIMIT_REACHED_LITE
+            : EMAIL_MESSAGE_TYPES.LIMIT_REACHED_PRO
+        );
+        db.user.update({
+          where: { id: user.id },
+          data: { limitReachedEmailSent: true },
+        });
+      }
       throw new AppClientError(
         `Number of messages has exceeded limit.${
           billingPlan === "LIGHT" ? " Consider upgrading to the PRO plan" : ""
@@ -63,7 +77,15 @@ export async function POST(request: Request) {
     }
     const isResetBillingPeriod =
       billingPeriodStartTimestamp !== user.billingPeriodStart.getTime();
-    await db.user.update({
+    if (isResetBillingPeriod) {
+      sendEmail(
+        user.email!,
+        billingPlan === "LIGHT"
+          ? EMAIL_MESSAGE_TYPES.SUBSCRIPTION_RESET_LITE
+          : EMAIL_MESSAGE_TYPES.SUBSCRIPTION_RESET_PRO
+      );
+    }
+    db.user.update({
       where: { id: user.id },
       data: {
         billingPeriodMessagesSent: isResetBillingPeriod
@@ -78,7 +100,7 @@ export async function POST(request: Request) {
     const qs = new URLSearchParams({
       text: formatDataMessage(rest),
     }).toString();
-    await fetch(
+    fetch(
       `${TELEGRAM_API_URL}/sendMessage?chat_id=${user.tgUserId}&${qs}&parse_mode=HTML`
     );
 

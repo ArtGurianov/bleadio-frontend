@@ -26,6 +26,7 @@ model User {
   tgUserId                      Int?
   billingPeriodStart            DateTime        @default(now())
   billingPeriodMessagesSent     Int             @default(0)
+  limitReachedEmailSent         Boolean         @default(false)
   accounts                      Account[]
   sessions                      Session[]
   createdAt                     DateTime        @default(now())

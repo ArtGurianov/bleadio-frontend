@@ -84,7 +84,7 @@ const UserProfileBtnCore = ({
   const messagesLimit =
     displayBillingPlan === "PRO"
       ? getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_PRO
-      : getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_LIGHT;
+      : getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_LITE;
   const displayData: Record<DisplayUserKey, { label: string; value: string }> =
     {
       [DISPLAY_USER_KEYS.EMAIL]: { label: "email:", value: email! },

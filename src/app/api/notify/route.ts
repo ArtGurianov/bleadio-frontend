@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     const messagesLimitNumber =
       billingPlan === "PRO"
         ? ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_PRO
-        : ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_LIGHT;
+        : ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_LITE;
     const billingPeriodStartTimestamp = calculateBillingPeriodStartTimestamp(
       Number(subscriptionStartTimestamp) * 1000 ||
         Math.round(user.createdAt.getTime())

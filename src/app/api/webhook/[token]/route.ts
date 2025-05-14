@@ -62,7 +62,7 @@ export async function POST(
     }
     if (userText.startsWith("/start")) {
       throw new AppClientError(
-        "Welcome to Blead.io bot! Get your api key from the <a href='https://www.blead.io'>website</a> and paste it here via /set_api_key command!"
+        "Welcome to blead.io bot! Get your api key from the website and paste it here via /set_api_key command!"
       );
     }
     if (userText.startsWith("/set_api_key")) {

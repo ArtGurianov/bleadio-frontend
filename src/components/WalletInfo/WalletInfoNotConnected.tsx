@@ -17,14 +17,14 @@ export const WalletInfoNotConnected = () => {
         onChangeIsConnecting={() => setIsConnecting(true)}
       />
       <div className="px-4 py-px bg-primary/10 border-l-3 border-b-2 border-primary/80 font-light font-serif w-full text-center text-primary">
-        {"Don't have Metamask yet? "}
+        {"Can't connect? "}
         <Link
           className="underline font-medium text-lg font-serif"
-          href={`https://www.metamask.io/download`}
+          href={`https://metamask.io/download`}
           rel="noopener noreferrer"
           target="_blank"
         >
-          {"GET STARTED"}
+          {"GET METAMASK"}
         </Link>
       </div>
     </div>

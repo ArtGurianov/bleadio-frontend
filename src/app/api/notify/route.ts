@@ -101,7 +101,7 @@ export async function POST(request: Request) {
     const qs = new URLSearchParams({
       text: formatDataMessage(rest),
     }).toString();
-    fetch(
+    await fetch(
       `${TELEGRAM_API_URL}/sendMessage?chat_id=${user.tgUserId}&${qs}&parse_mode=HTML`
     );
 
